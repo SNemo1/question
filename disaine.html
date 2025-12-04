@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ДИЗАЙН</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .butt-header {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 0 5px;
+      background: #9333ea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .butt-header:hover {
+      background: #7e22ce;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 15px;
+      z-index: 1000;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    body {
+      padding-top: 80px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4 flex items-center justify-center">
+ <header>
+    <nav>
+      <a class="butt-header" href="index.html">LAAH</a>
+      <a class="butt-header" href="disaine.html">DISAINE</a>
+      <a class="butt-header" href="">ALGORITM</a>
+    </nav>
+ </header>
+  <div id="quiz-container" class="max-w-3xl w-full"></div>
+
+  <script>
+const questions = [
+  {
+    id: 1,
+    question: "Який формат є векторним?",
+    options: ["PNG", "SVG", "JPG", "BMP"],
+    answer: 1
+  },
+  {
+    id: 2,
+    question: "Який інструмент в Adobe Illustrator використовується для створення кривих Безьє?",
+    options: ["Pen Tool", "Eraser Tool", "Brush Tool", "Pencil Tool"],
+    answer: 0
+  },
+  {
+    id: 3,
+    question: "Яка перевага векторної графіки над растровою?",
+    options: [
+      "При збільшенні не втрачає якості",
+      "Складається з пікселів",
+      "Підходить тільки для фото",
+      "Дає низьку точність"
+    ],
+    answer: 0
+  },
+  {
+    id: 4,
+    question: "Який тип шару дозволяє редагувати об'єкти окремо?",
+    options: ["Layer", "Background", "Mask", "Guide"],
+    answer: 0
+  },
+  {
+    id: 5,
+    question: "Який інструмент дозволяє об'єднати кілька фігур в одну?",
+    options: ["Direct Selection Tool", "Shape Builder", "Slice Tool", "Eyedropper"],
+    answer: 1
+  },
+  {
+    id: 6,
+    question: "Який файл є власним форматом Adobe Illustrator?",
+    options: ["AI", "PSD", "PDF", "SVG"],
+    answer: 0
+  },
+  {
+    id: 7,
+    question: "Яка функція дозволяє автоматично вирівнювати об'єкти по центру?",
+    options: ["Align", "Opacity", "Layers", "Gradient"],
+    answer: 0
+  },
+  {
+    id: 8,
+    question: "Який інструмент дозволяє змінити товщину контуру?",
+    options: ["Blend Tool", "Rotate Tool", "Stroke Panel", "Knife Tool"],
+    answer: 2
+  },
+  {
+    id: 9,
+    question: "Який тип графіки найкраще підходить для логотипів?",
+    options: ["Векторна", "Растрова", "3D-графіка", "Піксель-арт"],
+    answer: 0
+  },
+  {
+    id: 10,
+    question: "Який інструмент дозволяє створювати текст у Illustrator?",
+    options: ["Pen Tool", "Type Tool", "Knife Tool", "Blend Tool"],
+    answer: 1
+  },
+  {
+    id: 11,
+    question: "Який інструмент дозволяє створювати багатокутники в Illustrator?",
+    options: ["Star Tool", "Polygon Tool", "Line Tool", "Brush Tool"],
+    answer: 1
+  },
+  {
+    id: 12,
+    question: "Який формат найкраще підходить для збереження логотипу з прозорим фоном?",
+    options: ["JPG", "PDF", "PNG", "BMP"],
+    answer: 2
+  },
+  {
+    id: 13,
+    question: "Який інструмент дозволяє копіювати стиль одного об'єкта на інший?",
+    options: ["Eyedropper Tool", "Pen Tool", "Rotate Tool", "Lasso Tool"],
+    answer: 0
+  },
+  {
+    id: 14,
+    question: "Який інструмент дозволяє обрізати зайві частини об'єкта?",
+    options: ["Eraser Tool", "Slice Tool", "Knife Tool", "Scissor Tool"],
+    answer: 2
+  },
+  {
+    id: 15,
+    question: "Який тип графіки складається з пікселів?",
+    options: ["Векторна", "Растрова", "SVG-графіка", "Контурна"],
+    answer: 1
+  },
+  {
+    id: 16,
+    question: "Який інструмент дозволяє створювати плавні переходи між кольорами?",
+    options: ["Gradient Tool", "Knife Tool", "Eraser Tool", "Mesh Tool"],
+    answer: 0
+  },
+  {
+    id: 17,
+    question: "Який формат є найбільш придатним для редагування в Photoshop?",
+    options: ["EPS", "JPG", "PSD", "SVG"],
+    answer: 2
+  },
+  {
+    id: 18,
+    question: "Який інструмент дозволяє об'єднувати, віднімати або перетинати фігури?",
+    options: ["Pathfinder", "Gradient Tool", "Blend Tool", "Rotate Tool"],
+    answer: 0
+  },
+  {
+    id: 19,
+    question: "Який інструмент дозволяє створювати криві з опорними точками?",
+    options: ["Pen Tool", "Brush Tool", "Hand Tool", "Type Tool"],
+    answer: 0
+  },
+  {
+    id: 20,
+    question: "Який режим накладання дозволяє затемнити зображення?",
+    options: ["Overlay", "Darken", "Screen", "Lighten"],
+    answer: 1
+  },
+  {
+    id: 21,
+    question: "Який інструмент Illustrator дозволяє об'єднувати фігури за принципом додавання?",
+    options: ["Shape Builder", "Eraser Tool", "Opacity", "Pen Tool"],
+    answer: 0
+  },
+  {
+    id: 22,
+    question: "Який інструмент дозволяє створити копію об'єкта зі зміщенням?",
+    options: ["Scale Tool", "Rotate Tool", "Offset Path", "Brush Tool"],
+    answer: 2
+  },
+  {
+    id: 23,
+    question: "Яка панель дозволяє керувати шарами в Illustrator?",
+    options: ["Color Panel", "Layers Panel", "Align Panel", "Stroke Panel"],
+    answer: 1
+  },
+  {
+    id: 24,
+    question: "Який інструмент дозволяє розділити об'єкт на частини за довільною лінією?",
+    options: ["Knife Tool", "Gradient Tool", "Rotate Tool", "Mesh Tool"],
+    answer: 0
+  },
+  {
+    id: 25,
+    question: "Який тип маски дозволяє приховати частину зображення у Photoshop?",
+    options: ["Clipping Mask", "Vector Mask", "Transparency", "Resolution Mask"],
+    answer: 0
+  },
+  {
+    id: 26,
+    question: "Який інструмент дозволяє створити сітку для точного розміщення об'єктів?",
+    options: ["Artboard Tool", "Perspective Grid", "Slice Tool", "Hand Tool"],
+    answer: 1
+  },
+  {
+    id: 27,
+    question: "Який інструмент дозволяє створювати складні фігури шляхом перетину?",
+    options: ["Mesh Tool", "Pathfinder", "Pen Tool", "Width Tool"],
+    answer: 1
+  },
+  {
+    id: 28,
+    question: "Який колірний режим використовується для друку?",
+    options: ["CMYK", "RGB", "HSB", "Lab"],
+    answer: 0
+  },
+  {
+    id: 29,
+    question: "Який інструмент дозволяє змінити колір заливки об'єкта?",
+    options: ["Gradient Tool", "Fill/Swatches", "Knife Tool", "Opacity Panel"],
+    answer: 1
+  },
+  {
+    id: 30,
+    question: "Який тип шрифтів не має зарубок?",
+    options: ["Script", "Sans-serif", "Serif", "Monospace"],
+    answer: 1
+  },
+  {
+    id: 31,
+    question: "Який інструмент дозволяє змінити міжрядковий інтервал тексту?",
+    options: ["Character Panel", "Type Tool", "Pen Tool", "Warp Tool"],
+    answer: 0
+  },
+  {
+    id: 32,
+    question: "Яка клавіша в Illustrator використовується для копіювання об'єкта?",
+    options: ["Alt/Option", "Shift", "Ctrl", "Tab"],
+    answer: 0
+  },
+  {
+    id: 33,
+    question: "Яка клавіша дозволяє скасувати останню дію?",
+    options: ["Enter", "Ctrl/Command + Z", "Esc", "Tab"],
+    answer: 1
+  },
+  {
+    id: 34,
+    question: "Який інструмент дозволяє створити коло?",
+    options: ["Rectangle Tool", "Ellipse Tool", "Pen Tool", "Knife Tool"],
+    answer: 1
+  },
+  {
+    id: 35,
+    question: "Який тип об'єкта дозволяє редагувати текст у Illustrator?",
+    options: ["Shape", "Type Object", "Mask", "Brush"],
+    answer: 1
+  },
+  {
+    id: 36,
+    question: "Який інструмент дозволяє створити копію об'єкта з обертанням?",
+    options: ["Rotate Tool", "Scale Tool", "Width Tool", "Knife Tool"],
+    answer: 0
+  },
+  {
+    id: 37,
+    question: "Який інструмент дозволяє створити плавний перехід між двома об'єктами?",
+    options: ["Blend Tool", "Eyedropper", "Slice Tool", "Direct Selection Tool"],
+    answer: 0
+  },
+  {
+    id: 38,
+    question: "Який інструмент дозволяє віддзеркалити об'єкт по осі?",
+    options: ["Mirror Tool", "Reflect Tool", "Rotate Tool", "Scale Tool"],
+    answer: 1
+  },
+  {
+    id: 39,
+    question: "Який ефект дозволяє створити світіння навколо об'єкта?",
+    options: ["Outer Glow", "Drop Shadow", "Multiply", "Blur"],
+    answer: 0
+  },
+  {
+    id: 40,
+    question: "Який формат найкраще підходить для експорту векторної графіки для вебу?",
+    options: ["PNG", "SVG", "JPG", "TIFF"],
+    answer: 1
+  },
+  {
+    id: 41,
+    question: "Яка функція дозволяє зменшити кількість точок на кривій?",
+    options: ["Simplify", "Expand", "Outline Stroke", "Clipping Mask"],
+    answer: 0
+  },
+  {
+    id: 42,
+    question: "Який інструмент дозволяє створювати повторюваний візерунок?",
+    options: ["Pattern Options", "Rotate Tool", "Knife Tool", "Eraser Tool"],
+    answer: 0
+  },
+  {
+    id: 43,
+    question: "Який тип об'єкта дозволяє редагувати текст у межах фігури?",
+    options: ["Area Type", "Path Type", "Shape Type", "Raster Type"],
+    answer: 0
+  },
+  {
+    id: 44,
+    question: "Який інструмент дозволяє змінити розмір об'єкта пропорційно?",
+    options: ["Scale Tool", "Rotate Tool", "Knife Tool", "Hand Tool"],
+    answer: 0
+  },
+  {
+    id: 45,
+    question: "Який ефект дозволяє створити ілюзію об'єму?",
+    options: ["3D & Materials", "Blur", "Multiply", "Opacity"],
+    answer: 0
+  },
+  {
+    id: 46,
+    question: "Який формат найкраще підходить для збереження багатошарової графіки?",
+    options: ["JPG", "PNG", "PSD", "SVG"],
+    answer: 2
+  },
+  {
+    id: 47,
+    question: "Який інструмент дозволяє створити об'єкт з плавним переходом між формами?",
+    options: ["Blend Tool", "Knife Tool", "Rotate Tool", "Mesh Tool"],
+    answer: 0
+  },
+  {
+    id: 48,
+    question: "Який елемент в Illustrator дозволяє створювати кілька робочих областей?",
+    options: ["Layers", "Artboards", "Symbols", "Guides"],
+    answer: 1
+  },
+  {
+    id: 49,
+    question: "Який інструмент дозволяє змінити прозорість об'єкта?",
+    options: ["Opacity Panel", "Brush Tool", "Pen Tool", "Width Tool"],
+    answer: 0
+  },
+  {
+    id: 50,
+    question: "Який тип шрифтів має декоративний стиль і часто використовується для заголовків?",
+    options: ["Serif", "Display", "Sans-Serif", "Monospace"],
+    answer: 1
+  },
+  {
+    id: 51,
+    question: "Який інструмент дозволяє створити інтерактивну кнопку у веб-дизайні?",
+    options: ["Symbols", "Brush Tool", "Slice Tool", "Pen Tool"],
+    answer: 0
+  },
+  {
+    id: 52,
+    question: "Який формат найкраще підходить для експорту графіки з прозорим фоном?",
+    options: ["PDF", "PNG", "JPG", "BMP"],
+    answer: 1
+  },
+  {
+    id: 53,
+    question: "Який інструмент дозволяє створити об'єкт з плавним переходом між кольорами?",
+    options: ["Gradient Tool", "Slice Tool", "Width Tool", "Hand Tool"],
+    answer: 0
+  },
+  {
+    id: 54,
+    question: "Який тип об'єкта дозволяє редагувати текст уздовж кривої?",
+    options: ["Point Type", "Type on a Path", "Area Type", "Mask Type"],
+    answer: 1
+  },
+  {
+    id: 55,
+    question: "Який інструмент дозволяє створити копію об'єкта з нахилом?",
+    options: ["Shear Tool", "Pen Tool", "Mesh Tool", "Slice Tool"],
+    answer: 0
+  },
+  {
+    id: 56,
+    question: "Який ефект дозволяє створити ілюзію глибини?",
+    options: ["Drop Shadow", "Multiply", "Blur", "Overlay"],
+    answer: 0
+  },
+  {
+    id: 57,
+    question: "Який інструмент дозволяє створити шаблон для повторного використання?",
+    options: ["Symbols", "Hand Tool", "Knife Tool", "Eyedropper"],
+    answer: 0
+  },
+  {
+    id: 58,
+    question: "Який інструмент дозволяє зберегти набір кольорів для повторного використання?",
+    options: ["Swatches", "Layers", "Guides", "History"],
+    answer: 0
+  },
+  {
+    id: 59,
+    question: "Який кольоровий профіль використовується для екранів?",
+    options: ["RGB", "CMYK", "Pantone", "Lab"],
+    answer: 0
+  },
+  {
+    id: 60,
+    question: "Який інструмент дозволяє створити об'єкт з однаковими параметрами стилю?",
+    options: ["Eyedropper Tool", "Pen Tool", "Knife Tool", "Rotate Tool"],
+    answer: 0
+  },
+  {
+    id: 61,
+    question: "Який формат найкраще підходить для передачі векторної графіки до After Effects?",
+    options: ["JPG", "AI", "PNG", "GIF"],
+    answer: 1
+  },
+  {
+    id: 62,
+    question: "Який інструмент дозволяє створити об'єкт з повторюваним візерунком?",
+    options: ["Pattern Options", "Rotate Tool", "Knife Tool", "Mesh Tool"],
+    answer: 0
+  },
+  {
+    id: 63,
+    question: "Який тип об'єкта дозволяє редагувати текст у вигляді фігури?",
+    options: ["Area Type", "Point Type", "Shape Type", "Mask Type"],
+    answer: 0
+  },
+  {
+    id: 64,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом об'єму?",
+    options: ["3D & Materials", "Blur", "Eyedropper", "Pen Tool"],
+    answer: 0
+  },
+  {
+    id: 65,
+    question: "Який формат найкраще підходить для збереження графіки з прозорістю для вебу?",
+    options: ["TIFF", "SVG", "JPEG", "BMP"],
+    answer: 1
+  },
+  {
+    id: 66,
+    question: "Який інструмент дозволяє створити об'єкт з плавним переходом між формами?",
+    options: ["Blend Tool", "Lasso Tool", "Pen Tool", "Knife Tool"],
+    answer: 0
+  },
+  {
+    id: 67,
+    question: "Який інструмент дозволяє зменшити кількість вузлів на кривій?",
+    options: ["Simplify", "Offset Path", "Slice Tool", "Pencil Tool"],
+    answer: 0
+  },
+  {
+    id: 68,
+    question: "Який формат найкраще підходить для передачі векторного макету до друкарні?",
+    options: ["PNG", "EPS", "GIF", "WEBP"],
+    answer: 1
+  },
+  {
+    id: 69,
+    question: "Який параметр потрібно враховувати при підготовці макету до друку?",
+    options: ["DPI/PPI", "FPS", "Bitrate", "Volume"],
+    answer: 0
+  },
+  {
+    id: 70,
+    question: "Який інструмент дозволяє створити об'ємний текст у Illustrator?",
+    options: ["3D & Materials", "Brush Tool", "Gradient Tool", "Rotate Tool"],
+    answer: 0
+  },
+  {
+    id: 71,
+    question: "Який ефект дозволяє створити розмиття країв об'єкта?",
+    options: ["Feather", "Multiply", "Inner Glow", "Sharpen"],
+    answer: 0
+  },
+  {
+    id: 72,
+    question: "Який формат підтримує збереження векторної графіки з текстом?",
+    options: ["JPG", "SVG", "BMP", "WEBP"],
+    answer: 1
+  },
+  {
+    id: 73,
+    question: "Який інструмент дозволяє створити інтерактивну область для веб-експорту?",
+    options: ["Slice Tool", "Mesh Tool", "Text Tool", "Knife Tool"],
+    answer: 0
+  },
+  {
+    id: 74,
+    question: "Який параметр дозволяє зменшити розмір файлу без втрати якості в SVG?",
+    options: ["Optimization", "Brightness", "Opacity", "Saturation"],
+    answer: 0
+  },
+  {
+    id: 75,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом прозорого скла?",
+    options: ["Opacity + Blur", "Clipping Mask", "Knife Tool", "Erase Tool"],
+    answer: 0
+  },
+  {
+    id: 76,
+    question: "Який формат найкраще підходить для збереження логотипу з прозорим фоном для вебу?",
+    options: ["PNG", "BMP", "JPG", "TIFF"],
+    answer: 0
+  },
+  {
+    id: 77,
+    question: "Який інструмент дозволяє створити об'єкт з повторюваним орнаментом?",
+    options: ["Pattern Options", "Hand Tool", "Eyedropper", "Rotate Tool"],
+    answer: 0
+  },
+  {
+    id: 78,
+    question: "Який формат найкраще підходить для збереження графіки з анімацією?",
+    options: ["GIF", "JPG", "TIFF", "BMP"],
+    answer: 0
+  },
+  {
+    id: 79,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом світіння зсередини?",
+    options: ["Inner Glow", "Drop Shadow", "Multiply", "Sharpen"],
+    answer: 0
+  },
+  {
+    id: 80,
+    question: "Який параметр дозволяє зменшити розмір SVG-файлу для вебу?",
+    options: ["Compression", "Exposure", "White Balance", "Clarity"],
+    answer: 0
+  },
+  {
+    id: 81,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом розмиття?",
+    options: ["Pen Tool", "Knife Tool", "Eyedropper", "Blur Effect"],
+    answer: 3
+  },
+  {
+    id: 82,
+    question: "Який тип кольору використовується для друку з точним відтворенням відтінків?",
+    options: ["RGB", "Pantone", "HSB", "Lab"],
+    answer: 1
+  },
+  {
+    id: 83,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом тиснення?",
+    options: ["Drop Shadow", "Bevel & Emboss", "Opacity", "Brightness"],
+    answer: 1
+  },
+  {
+    id: 84,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом прозорості, що змінюється по градієнту?",
+    options: ["Slice Tool", "Expand", "Opacity Mask", "Pathfinder"],
+    answer: 2
+  },
+  {
+    id: 85,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом розмиття по краях?",
+    options: ["Scale Tool", "Text Tool", "Feather", "Hand Tool"],
+    answer: 2
+  },
+  {
+    id: 86,
+    question: "Який формат найкраще підходить для збереження графіки з прозорим фоном у Photoshop?",
+    options: ["JPG", "BMP", "TIFF", "PNG"],
+    answer: 3
+  },
+  {
+    id: 87,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом світіння зовні?",
+    options: ["Multiply", "Outer Glow", "Sharpen", "Gaussian Blur"],
+    answer: 1
+  },
+  {
+    id: 88,
+    question: "Який формат найкраще підходить для збереження графіки з високою деталізацією для друку?",
+    options: ["WEBP", "BMP", "TIFF", "GIF"],
+    answer: 2
+  },
+  {
+    id: 89,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом внутрішнього світіння?",
+    options: ["Inner Glow", "Drop Shadow", "Overlay", "Saturation"],
+    answer: 0
+  },
+  {
+    id: 90,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом прозорості, що змінюється по градієнту?",
+    options: ["Blur", "Knife Tool", "Rotate Tool", "Opacity Mask"],
+    answer: 3
+  },
+  {
+    id: 91,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом повторення по колу?",
+    options: ["Rotate Tool + Copies", "Slice Tool", "Pencil Tool", "Ruler"],
+    answer: 0
+  },
+  {
+    id: 92,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом розмиття фону?",
+    options: ["Gaussian Blur", "Mesh Tool", "Scale Tool", "Pencil Tool"],
+    answer: 0
+  },
+  {
+    id: 93,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом прозорого скла?",
+    options: ["Knife Tool", "Rotate Tool", "Type Tool", "Opacity + Blur"],
+    answer: 3
+  },
+  {
+    id: 94,
+    question: "Який інструмент дозволяє створити об'єкт з ефектом обертання навколо центру?",
+    options: ["Scale Tool", "Rotate Tool", "Zoom Tool", "Knife Tool"],
+    answer: 1
+  },
+  {
+    id: 95,
+    question: "Як застосувати вставлення позаду вибраного об'єкта?",
+    options: ["Ctrl/Command + V", "Ctrl/Command + F", "Ctrl/Command + Z", "Ctrl/Command + B"],
+    answer: 3
+  },
+  {
+    id: 96,
+    question: "Як виконати вставлення об'єкта конкретно в те саме місце?",
+    options: ["Ctrl/Command + S", "Ctrl/Command + B", "Ctrl/Command + X", "Ctrl/Command + F"],
+    answer: 3
+  },
+  {
+    id: 97,
+    question: "Які два формати є векторними?",
+    options: ["PNG і JPG", "GIF і BMP", "RAW і TIFF", "SVG і AI"],
+    answer: 3
+  },
+  {
+    id: 98,
+    question: "Які два інструменти використовуються для створення кривих у Illustrator?",
+    options: ["Eraser і Knife", "Selection і Hand Tool", "Pen і Curvature Tool", "Text і Slice Tool"],
+    answer: 2
+  },
+  {
+    id: 99,
+    question: "Які два ефекти створюють тінь під об'єктом?",
+    options: ["Opacity і Exposure", "Blur і Sharpen", "Multiply і Screen", "Drop Shadow і Outer Glow"],
+    answer: 3
+  },
+  {
+    id: 100,
+    question: "Які два формати підтримують прозорість?",
+    options: ["PNG і SVG", "JPG і BMP", "TIFF і BMP", "GIF і RAW"],
+    answer: 0
+  }
+];
+
+
+
+    let currentQuestion = 0;
+    let selectedAnswer = null;
+    let score = 0;
+
+    const container = document.getElementById('quiz-container');
+
+    function renderQuiz() {
+      container.innerHTML = '';
+
+      const question = questions[currentQuestion];
+      const isFinished = currentQuestion === questions.length;
+      const progressPercent = ((currentQuestion) / questions.length) * 100;
+
+      if(isFinished){
+        const finishHTML = document.createElement('div');
+        finishHTML.className = "bg-white rounded-2xl shadow-xl p-6 md:p-8 text-center";
+        finishHTML.innerHTML = `
+          <div class="text-6xl mb-4">${score === questions.length ? '🏆' : score >= questions.length * 0.8 ? '⭐' : score >= questions.length * 0.6 ? '💪' : '📖'}</div>
+          <h2 class="text-3xl font-bold text-gray-800 mb-2">Тест завершено!</h2>
+          <p class="text-xl text-gray-600 mb-6">Ваш результат: <span class="font-bold text-purple-600">${score}</span> з ${questions.length}</p>
+          <p class="text-lg text-gray-600 mb-8">${score === questions.length ? 'Бездоганно! Ви майстер лінійної алгебри! 🎓'
+            : score >= questions.length * 0.8 ? 'Чудовий результат! Ви дуже добре підготовлені!'
+            : score >= questions.length * 0.6 ? 'Непоганий результат! Продовжуйте практикуватися!'
+            : 'Потрібно більше практики. Повторіть теорію та спробуйте знову!'}</p>
+          <button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-xl transition-colors" id="restart-btn">Пройти тест заново</button>
+        `;
+        container.appendChild(finishHTML);
+        document.getElementById('restart-btn').onclick = () => {currentQuestion=0; score=0; selectedAnswer=null; renderQuiz();}
+        return;
+      }
+
+      const quizHTML = document.createElement('div');
+      quizHTML.className = "bg-white rounded-2xl shadow-xl p-6 md:p-8";
+
+      quizHTML.innerHTML = `
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">ДИЗАЙН</h1>
+            <button id="reset-btn" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">🔄</button>
+          </div>
+          <div class="flex justify-between items-center text-sm text-gray-600">
+            <span>Питання ${currentQuestion + 1} з ${questions.length}</span>
+            <span class="font-semibold">Правильних: ${score}</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+            <div class="bg-purple-600 h-2 rounded-full transition-all duration-300" style="width:${progressPercent}%"></div>
+          </div>
+        </div>
+
+        <h2 class="text-xl font-semibold text-gray-800 mb-6">${question.question}</h2>
+        <div class="space-y-3" id="options-container"></div>
+        <div id="explanation-container" class="mt-6"></div>
+        <button id="next-btn" class="w-full mt-6 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors hidden">Наступне питання ➡️</button>
+      `;
+
+      container.appendChild(quizHTML);
+
+      document.getElementById('reset-btn').onclick = () => {currentQuestion=0; score=0; selectedAnswer=null; renderQuiz();};
+
+      const optionsContainer = document.getElementById('options-container');
+      question.options.forEach((opt,index)=>{
+        const btn = document.createElement('button');
+        btn.className = `w-full p-4 text-left rounded-xl border-2 border-gray-200 hover:border-purple-400 hover:bg-purple-50 transition-all flex justify-between items-center`;
+        btn.innerHTML = `<span class="font-medium">${opt}</span>`;
+        btn.onclick = () => handleAnswer(index, btn);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(index, btn) {
+      if(selectedAnswer !== null) return;
+      selectedAnswer = index;
+      const question = questions[currentQuestion];
+      const explanationContainer = document.getElementById('explanation-container');
+      const nextBtn = document.getElementById('next-btn');
+
+      const buttons = document.querySelectorAll('#options-container button');
+      buttons.forEach((b,i)=>{
+        b.disabled = true;
+        if(i === question.answer){
+          b.classList.add('border-green-500','bg-green-50');
+        } else if(i === selectedAnswer){
+          b.classList.add('border-red-500','bg-red-50');
+        }
+      });
+
+      if(index === question.answer) score++;
+
+      const isCorrect = index === question.answer;
+      const correctAnswerText = question.options[question.answer];
+      explanationContainer.innerHTML = `<p class="font-semibold mb-2">${isCorrect ? '✅ Правильно!' : '❌ Неправильно'}</p><p class="text-gray-700">${isCorrect ? 'Чудова робота!' : `Правильна відповідь: ${correctAnswerText}`}</p>`;
+      nextBtn.classList.remove('hidden');
+      nextBtn.onclick = () => {currentQuestion++; selectedAnswer=null; renderQuiz();}
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>

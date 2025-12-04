@@ -8,8 +8,51 @@
   <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4 flex items-center justify-center">
+ <style>
+    .butt-header {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 0 5px;
+      background: #9333ea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .butt-header:hover {
+      background: #7e22ce;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 15px;
+      z-index: 1000;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    body {
+      padding-top: 80px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4 flex items-center justify-center">
+ <header>
+    <nav>
+      <a class="butt-header" href="index.html">LAAH</a>
+      <a class="butt-header" href="disaine.html">DISAINE</a>
+      <a class="butt-header" href="">ALGORITM</a>
+    </nav>
+ </header>
   <div id="quiz-container" class="max-w-3xl w-full"></div>
-
   <script>
  
 const questions = [
