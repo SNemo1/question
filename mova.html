@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Тест — повна версія</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+   
+    .butt-header {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 0 5px;
+      background: #9333ea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .butt-header:hover { background: #7e22ce; }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 12px 16px;
+      z-index: 1000;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    nav { display:flex; gap:8px; align-items:center; }
+    body { padding-top:84px; }
+    .dark body { background: #0a101e; }
+    .dark header { background:#0b1220; color:#e6eef8; box-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+    .dark .butt-header { background:#7c3aed; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4 flex items-center justify-center">
+<header>
+  <nav>
+    <a class="butt-header" href="index.html">LAAH</a>
+    <a class="butt-header" href="disaine.html">DISAINE</a>
+    <a class="butt-header" href="">ALGORITM</a>
+    <a class="butt-header" href="mova.html">MOVA</a>
+  </nav>
+
+  <div class="flex items-center gap-3">
+    <button id="themeToggle" class="butt-header !bg-white !text-purple-700">Тема: Світла</button>
+    <button id="startExamBtn" class="butt-header">Режим «Екзамен»</button>
+  </div>
+</header>
+
+<main class="max-w-3xl w-full">
+  <div id="quiz-container" class="max-w-3xl w-full"></div>
+</main>
+
+<script>
+const QUESTIONS = [
+  { id:1, question:"Документ, що фіксує двосторонню угоду, згідно з якою одна сторона зобов’язується виконувати від імені іншої певні юридичні дії – це", options:["довідка","постанова","наказ","доручення"], answer:4 },
+  { id:2, question:"Мовленнєва професійна компетенція — це:", options:["норми і правила літературної мови, за якими будується процес спілкування","професійні знання, уміння і навички, необхідні для ефективної роботи","уніфіковані стандарти реалізації мовної системи","система умінь і навичок використання знань під час фахового спілкування"], answer:4 },
+  { id:3, question:"Справити потрібне враження на потенційного роботодавця, звернути його увагу на ваш професійний досвід – є основною метою:", options:["автобіографії","трудової книжки","особового листка","мотиваційного листа"], answer:4 },
+  { id:4, question:"Оберіть три вимоги до написання курсової роботи:", options:["відсутність цитувань інших дослідників","наявність до 10 цитат на сторінці тексту","обсяг роботи – 20–25 сторінок","чітка структура, список використаної сучасної літератури","додатки повинні містити більшу частину тексту роботи","робота має бути опублікована у фаховому виданні","оформлення має відповідати естетичним, мовним і технічним нормам"], answer:[3,4,7] },
+  { id:5, question:"«Закріплена традицією або законодавством мова, вживання якої обов’язкове» — це:", options:["державна мова","національна мова","літературна мова","фахова мова"], answer:1 },
+  { id:6, question:"Поняття «стиль» розкрито в рядку:", options:["різновид літературної мови, що обслуговує певну сферу діяльності","сукупність загальноприйнятих правил реалізації мовної системи","оброблена, унормована форма національної мови","повтор варіанта b","сукупність загальноприйнятих правил реалізації мовної системи"], answer:1 },
+  { id:7, question:"Способи репрезентації наукової інформації:", options:["звіт, резюме, доповідна записка","план, протокол, довідка","доповідь, проповідь, паспорт","стаття, тези, конспект"], answer:4 },
+  { id:8, question:"Оберіть три основні аспекти комунікативної професіограми фахівця:", options:["уміння емоційно спілкуватися","робота з документами","уміння вести діалог","критика співбесідників/слухачів","майстерність ділового листування","майстерність публічного виступу","відсутність стратегії спілкування"], answer:[1,3,6] },
+  { id:9, question:"Юридична сила забезпечується встановленим для кожного виду документів:", options:["класом документів","комплексом реквізитів","державним стандартом","технічними вимогами"], answer:2 },
+  { id:10, question:"Виберіть правильний варіант оформлення адреси:", options:["м. Львів, вул. С. Бандери буд. 16 кв. 23","м. Львів вул. С. Бандери, 16/23","Вул. С. Бандери, буд.16 кв., 23, м. Львів","м. Львів, вул. С. Бандери, буд.16, кв. 23"], answer:4 },
+  { id:11, question:"Якщо документ адресується установі без зазначення посадової особи, її найменування подається в:", options:["родовому відмінку","називному відмінку","знахідному відмінку","давальному відмінку"], answer:1 },
+  { id:12, question:"У чому відображаються ідентифікаційні ознаки документа:", options:["у змісті","у формі","у реквізитах","у функціях"], answer:3 },
+  { id:13, question:"Реквізит, який не є обов’язковим відповідно до Закону №1982-VIII:", options:["герб організації","печатка","підпис","реєстраційний номер"], answer:2 },
+  { id:14, question:"Документ – це:", options:["основний вид ділового мовлення, що фіксує інформацію","сукупність реквізитів, розташованих у певній послідовності","вид кореспонденції зі стислим текстом","різновид документів колегіальних органів"], answer:1 },
+  { id:15, question:"За походженням виділяють такі види документів:", options:["прості / складні","службові / особисті","первинні / вторинні","вхідні / вихідні"], answer:2 },
+  { id:16, question:"Норми літературної мови, які регулюють правильність слововживання:", options:["пунктуаційні","граматичні","лексичні","орфографічні"], answer:3 },
+  { id:17, question:"Оберіть три вимоги до осіб, які видають документ:", options:["відсутність будь-яких вимог","відповідність вимогам, що діють у межах організації","укладання тільки електронних документів","дотримання чинних норм законодавства","видавання документів у межах компетенції","дотримання правил складання та оформлення документів","право керівника видавати будь-які документи"], answer:[2,4,5] },
+  { id:18, question:"Культура усного і писемного мовлення полягає в тому, щоб:", options:["використовувати мовні варіанти","досконало знати мовні норми","послідовно дотримуватись мовних норм","вивчати мовні норми"], answer:3 },
+  { id:19, question:"Установіть відповідність (За походженням / За строками виконання / За стадіями відтворення / За місцем виникнення):", options:["вхідні й вихідні","службові й особисті","внутрішні й зовнішні","термінові й дуже термінові","оригінал, копія, дублікат"], answer:["службові й особисті","термінові й дуже термінові","оригінал, копія, дублікат","внутрішні й зовнішні"] },
+  { id:20, question:"Характеристика – це:", options:["документ про виконання певної роботи","документ з оцінкою ділових і моральних якостей працівника","документ з аналізом співвідношення навичок і посади","документ з короткими відомостями про діяльність особи"], answer:2 },
+
+  { id:21, question:"Трьома обов’язковими реквізитами документа згідно з Державним стандартом України є:", options:["довідкові дані про організацію та відбиток печатки","заголовок до тексту, текст і підпис документа","назва організації та назва виду документа","прізвище виконавця і його номер телефону","гриф обмеження доступу до документа","дата, реєстраційний індекс документа","код організації та код форми документа"], answer:[2,6,7] },
+
+  { id:22, question:"Стандартизація документів – це:", options:["конкретні форми і системи документації, розроблені відомствами задля затвердження видів бланків","процес проведення скорочення кількості документів","виготовлені Міністерством охорони здоров’я України уніфіковані форми бланків медичних документів","форма юридичного закріплення проведеної уніфікації та рівня її обов’язковості"], answer:1 },
+
+  { id:23, question:"У зовнішній особистій заяві обов’язково зазначають:", options:["контактні телефони та електронну адресу","повну поштову та юридичну адресу установи","склад сім’ї","повну домашню адресу"], answer:1 },
+
+  { id:24, question:"Установіть відповідність (типи документів):", options:["довідково-інформаційні документи","особисті офіційні документи","організаційно-розпорядчі документи","обліково-фінансові документи","документи з кадрово-контрактних питань"], answer:[1,3,4,5] },
+
+  { id:25, question:"Фахова мова - це:", options:["сукупність мовних засобів, зумовлених метою спілкування","сукупність загальноприйнятих правил реалізації мовної системи","сукупність усіх мовних засобів, якими послуговуються у професійно обмеженій сфері комунікації з метою забезпечення порозуміння","сукупність усіх граматичних форм, усіх слів, усіх особливостей вимови і наголосу людей, що користуються українською мовою як рідною"], answer:3 },
+
+  { id:26, question:"Головна функція документа:", options:["зберігання і поширення інформації","збереження та відновлення пам'яті","фотографічне відтворення та фіксація","збереження та відтворення текстів"], answer:1 },
+
+  { id:27, question:"Державна мовна політика - це:", options:["система заходів, спрямованих на регулювання мовних відносин у державі","обговорення, відстоювання і пропаганда важливих суспільно-політичних ідей","взаємодія різних мов чи різних форм існування однієї мови в певній державі","система засадничих нормативних постанов, що ґрунтуються на комплексному оцінюванні мовної ситуації"], answer:1 },
+
+  { id:28, question:"Найістотнішими мовними ознаками ділового стилю є:", options:["необмежене вживання не по-книжному оформлених конструкцій з розмовним відтінком","інтонаційне оформлення висловлюваного","широке використання слів, пов’язаних з лексикою, яка стосується певної галузі суспільного життя","висока і водночас своєрідна ритмомелодика мовлення"], answer:3 },
+
+  { id:29, question:"Документ, у якому людина повідомляє стислі відомості про освіту, трудову діяльність, професійний досвід і досягнення – це:", options:["характеристика","заява","наказ","автобіографія"], answer:4 },
+
+  { id:30, question:"За місцем виникнення виділяють такі види документів:", options:["організаційні / розпорядчі","стандартні / індивідуальні","внутрішні / зовнішні","вхідні / вихідні"], answer:3 },
+
+  { id:31, question:"За способом взаємодії між комунікантами виділяють такі види:", options:["побутове, наукове, фахово-ділове","монологічне, діалогічне, полілогічне","Загальне, конкретне, спеціалізоване","індивідуальне, колективне, загальне"], answer:2 },
+
+  { id:32, question:"Членування тексту на складові частини, графічне відокремлення однієї частини від іншої – це:", options:["таблиця","схема","тези","рубрикація"], answer:4 },
+
+  { id:33, question:"Установіть відповідність (параметри обговорень та форм):", options:[
+      "діалогічний метод творчої діяльності групи осіб, побудований на публічному, відкритому, доброзичливому обговоренні",
+      "обговорення якого-небудь питання, полеміка",
+      "спільне обговорення важливих питань і прийняття рішень",
+      "зустріч, зібрання членів організації, що проводяться з метою обміну думками"
+    ], answer:[1,2,3,4] },
+
+  { id:34, question:"Основною ознакою довідково-інформаційних документів є:", options:["переконання та маніпуляція думками працівників закладу","інформування про фактичний стан справ установи чи організації","спрямованість від керівника до працівника організації","обов'язковість для виконання та розпорядчий характер"], answer:2 },
+
+  { id:35, question:"Уніфікація документів – це:", options:["документи, що відображають суть взаємовідносин владних інституцій з територіальними спільнотами громадян","напрям поліпшення діловодства шляхом повної автоматизації та комп’ютеризації ділових процесів","процес встановлення і застосування стандартів щодо поліпшення якості документів","приведення до єдиної форми або системи, встановлення єдиного комплексу видів документів для управлінських ситуацій, розроблення єдиних форм і правил укладання документів"], answer:4 },
+
+  { id:36, question:"Основне призначення офіційно-ділового стилю:", options:["відстоювання і пропагування суспільно-політичних ідей, формування відповідної громадської думки","регулювання офіційних стосунків, спілкування в державно-правовій і суспільно-виробничій сферах","систематизація знань, повідомлення про результати наукових досліджень","пропагування дотримання норм офіційності та ввічливості"], answer:2 },
+
+  { id:37, question:"Оберіть три аспекти культури мови:", options:["ортологічний","стилістичний","логічний","змістовий","емоційний","комунікативний","етичний"], answer:[1,2,6] },
+
+  { id:38, question:"Трьома основними напрямами удосконалення документації є:", options:["уніфікація","стандартизація","гармонізація","компетенція","кодифікація","юридична сила","регламентація"], answer:[1,2,7] },
+
+  { id:39, question:"Оберіть три вимоги щодо укладання документів:", options:["стандартизовані","психологічні","лінгвістичні","установчі","технічні","правові","стилістичні"], answer:[1,5,6] },
+
+  { id:40, question:"Українська мова за професійним спрямуванням - це:", options:["терміни та професіоналізми, що використовуються в діловій сфері","загальнонародна мова, вживання якої є обов'язковим","мова художньої літератури, мова ЗМІ","різновид літературної мови, що вживається в професійному спілкуванні"], answer:4 }
+];
+
+let currentQuestion = 0;
+let selectedAnswer = null;
+let selectedAnswers = [];
+let score = 0;
+
+let examMode = false;
+const EXAM_SECONDS = 20 * 60; 
+let examRemaining = EXAM_SECONDS;
+let examTimerInterval = null;
+
+const container = document.getElementById("quiz-container");
+const STORAGE_KEY = "quiz_app_state_v1";
+const THEME_KEY = "quiz_theme_v1";
+
+function saveState() {
+  const state = {
+    currentQuestion,
+    selectedAnswer,
+    selectedAnswers,
+    score,
+    examMode,
+    examRemaining,
+    questionsAnswers: QUESTIONS.map(q => q.answer) 
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return false;
+  try {
+    const s = JSON.parse(raw);
+    currentQuestion = s.currentQuestion ?? 0;
+    selectedAnswer = s.selectedAnswer ?? null;
+    selectedAnswers = s.selectedAnswers ?? [];
+    score = s.score ?? 0;
+    examMode = s.examMode ?? false;
+    examRemaining = s.examRemaining ?? EXAM_SECONDS;
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearState() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+    document.getElementById("themeToggle").innerText = "Тема: Темна";
+  } else {
+    document.documentElement.classList.remove("dark");
+    document.getElementById("themeToggle").innerText = "Тема: Світла";
+  }
+  localStorage.setItem(THEME_KEY, theme);
+}
+document.getElementById("themeToggle").addEventListener("click", () => {
+  const current = localStorage.getItem(THEME_KEY) || "light";
+  applyTheme(current === "light" ? "dark" : "light");
+});
+applyTheme(localStorage.getItem(THEME_KEY) || "light");
+
+function startExamTimer() {
+  stopExamTimer();
+  examTimerInterval = setInterval(() => {
+    examRemaining--;
+    renderTimer();
+    saveState();
+    if (examRemaining <= 0) {
+      stopExamTimer();
+      finish(); 
+      alert("Час закінчився. Тест завершено.");
+    }
+  }, 1000);
+}
+
+function stopExamTimer() {
+  if (examTimerInterval) {
+    clearInterval(examTimerInterval);
+    examTimerInterval = null;
+  }
+}
+
+function renderTimer() {
+  const el = document.getElementById("exam-timer");
+  if (!el) return;
+  const mm = String(Math.floor(examRemaining / 60)).padStart(2, "0");
+  const ss = String(examRemaining % 60).padStart(2, "0");
+  el.innerText = `⏱ ${mm}:${ss}`;
+}
+
+function renderQuiz() {
+  container.innerHTML = "";
+  if (currentQuestion >= QUESTIONS.length) return finish();
+
+  const q = QUESTIONS[currentQuestion];
+
+  const wrap = document.createElement("div");
+  wrap.className = "bg-white dark:bg-[#071025] dark:text-slate-100 rounded-2xl shadow-xl p-6 md:p-8";
+
+  wrap.innerHTML = `
+    <div class='mb-6 flex items-start justify-between gap-4'>
+      <div>
+        <h1 class='text-2xl font-bold mb-2'>Тест</h1>
+        <div class='text-sm text-gray-600 dark:text-gray-300'>Питання ${currentQuestion + 1} з ${QUESTIONS.length}</div>
+      </div>
+      <div class='text-right'>
+        <div id='exam-timer' class='text-sm text-gray-600 dark:text-gray-300'></div>
+        <div class='mt-2 text-sm'>
+          <button id='saveProgressBtn' class='px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700 text-sm'>Зберегти прогрес</button>
+          <button id='resetProgressBtn' class='px-3 py-1 rounded-md border border-red-200 text-red-600 text-sm ml-2'>Скинути</button>
+        </div>
+      </div>
+    </div>
+
+    <h2 class='text-xl font-semibold mb-6'>${escapeHtml(q.question)}</h2>
+    <div id='options' class='space-y-3'></div>
+    <div id='explanation' class='mt-6'></div>
+    <div class='mt-6 flex gap-3'>
+      <button id='nextBtn' class='flex-1 bg-purple-600 text-white py-3 rounded-xl hidden'>Наступне</button>
+      <button id='prevBtn' class='px-4 py-3 border rounded-xl hidden'>Назад</button>
+    </div>
+  `;
+
+  container.appendChild(wrap);
+  const options = document.getElementById('options');
+
+  q.options.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = "w-full p-4 text-left rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900 transition";
+    b.innerText = opt;
+    b.onclick = () => handleSelect(i + 1, b);
+    options.appendChild(b);
+  });
+
+  const prevBtn = document.getElementById("prevBtn");
+  if (currentQuestion > 0) {
+    prevBtn.classList.remove("hidden");
+    prevBtn.onclick = () => {
+      currentQuestion = Math.max(0, currentQuestion - 1);
+      selectedAnswer = null;
+      selectedAnswers = [];
+      renderQuiz();
+    };
+  } else {
+    prevBtn.classList.add("hidden");
+  }
+
+  document.getElementById("saveProgressBtn").onclick = () => {
+    saveState();
+    alert("Прогрес збережено.");
+  };
+  document.getElementById("resetProgressBtn").onclick = () => {
+    if (confirm("Скинути весь прогрес і почати з початку?")) {
+      clearState();
+      location.reload();
+    }
+  };
+
+  renderTimer();
+}
+
+function escapeHtml(str){
+  return str.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+}
+
+function handleSelect(index, btn) {
+  const q = QUESTIONS[currentQuestion];
+  const nextBtn = document.getElementById("nextBtn");
+
+  if (Array.isArray(q.answer)) {
+    if (!selectedAnswers.includes(index)) {
+      selectedAnswers.push(index);
+      btn.classList.add("border-blue-500", "bg-blue-50");
+    } else {
+      selectedAnswers = selectedAnswers.filter(x => x !== index);
+      btn.classList.remove("border-blue-500", "bg-blue-50");
+    }
+    nextBtn.classList.remove("hidden");
+    nextBtn.onclick = () => checkMultiple();
+    return;
+  }
+
+  if (selectedAnswer !== null) return; 
+  selectedAnswer = index;
+  checkSingle();
+}
+
+function checkSingle() {
+  const q = QUESTIONS[currentQuestion];
+  const explanation = document.getElementById("explanation");
+  const nextBtn = document.getElementById("nextBtn");
+
+  const correct = selectedAnswer === q.answer;
+
+  document.querySelectorAll('#options button').forEach((b, i) => {
+    b.disabled = true;
+    if (i + 1 === q.answer) b.classList.add('border-green-500', 'bg-green-50');
+    if (i + 1 === selectedAnswer && !correct) b.classList.add('border-red-500', 'bg-red-50');
+  });
+
+  if (correct) score++;
+  explanation.innerHTML = `<p class='font-semibold'>${correct ? "Правильно" : "Неправильно"}</p>`;
+
+  nextBtn.classList.remove('hidden');
+  nextBtn.onclick = () => { currentQuestion++; selectedAnswer=null; renderQuiz(); saveState(); };
+  saveState();
+}
+
+function checkMultiple() {
+  const q = QUESTIONS[currentQuestion];
+  const explanation = document.getElementById("explanation");
+  const nextBtn = document.getElementById("nextBtn");
+
+  const buttons = document.querySelectorAll('#options button');
+
+  buttons.forEach((b, i) => {
+    b.disabled = true;
+    if (q.answer.includes(i + 1)) b.classList.add('border-green-500', 'bg-green-50');
+  });
+
+  selectedAnswers.forEach(sel => {
+    if (!q.answer.includes(sel)) buttons[sel - 1].classList.add('border-red-500', 'bg-red-50');
+  });
+
+  const correct =
+    selectedAnswers.length === q.answer.length &&
+    selectedAnswers.every(v => q.answer.includes(v));
+
+  if (correct) score++;
+
+  explanation.innerHTML = `<p class='font-semibold'>${correct ? "Правильно" : "Неправильно"}</p>`;
+
+  nextBtn.onclick = () => {
+    currentQuestion++;
+    selectedAnswers = [];
+    renderQuiz();
+    saveState();
+  };
+  saveState();
+}
+
+function finish() {
+  stopExamTimer();
+  clearState(); 
+  container.innerHTML = `
+    <div class='bg-white dark:bg-[#071025] rounded-2xl shadow-xl p-8 text-center'>
+      <h2 class='text-3xl font-bold mb-4'>Тест завершено!</h2>
+      <p class='text-xl mb-6'>Ваш результат: ${score} з ${QUESTIONS.length}</p>
+      <div class="flex justify-center gap-4">
+        <button id='retryBtn' class='bg-purple-600 text-white py-3 px-8 rounded-xl'>Пройти знову</button>
+        <button id='viewKeysBtn' class='border py-3 px-6 rounded-xl'>Переглянути правильні відповіді</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("retryBtn").onclick = () => restart();
+  document.getElementById("viewKeysBtn").onclick = () => showAnswerKey();
+}
+
+function restart(){
+  currentQuestion=0; score=0; selectedAnswer=null; selectedAnswers=[]; examMode=false; examRemaining=EXAM_SECONDS;
+  clearState();
+  renderQuiz();
+}
+
+
+function showAnswerKey() {
+  const list = QUESTIONS.map((q, idx) => {
+    let ansText;
+    if (Array.isArray(q.answer)) {
+      ansText = q.answer.map(i => `${i}. ${q.options[i-1]}`).join(" | ");
+    } else {
+      ansText = `${q.answer}. ${q.options[q.answer-1]}`;
+    }
+    return `<li class="mb-2"><strong>Питання ${idx+1}:</strong> ${escapeHtml(q.question)}<br><span class="text-sm text-gray-600 dark:text-gray-300">Правильні відповіді: ${escapeHtml(ansText)}</span></li>`;
+  }).join("");
+  container.innerHTML = `
+    <div class='bg-white dark:bg-[#071025] rounded-2xl shadow-xl p-8'>
+      <h2 class='text-2xl font-bold mb-4'>Ключ відповідей</h2>
+      <ol class='list-decimal ml-6 text-sm'>${list}</ol>
+      <div class='text-center mt-6'>
+        <button id='backToResult' class='bg-purple-600 text-white py-2 px-4 rounded-xl'>Назад</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("backToResult").onclick = () => finish();
+}
+
+document.getElementById("startExamBtn").addEventListener("click", () => {
+  if (!examMode) {
+    if (!confirm("Почати режим «Екзамен» з таймером (20 хв)? Режим блокуватиме зміну відповідей після вибору і буде автоматично завершений по таймеру.")) return;
+    examMode = true;
+    examRemaining = EXAM_SECONDS;
+    startExamTimer();
+ 
+    currentQuestion = 0;
+    score = 0;
+    selectedAnswer = null;
+    selectedAnswers = [];
+    saveState();
+    renderQuiz();
+    document.getElementById("startExamBtn").innerText = "Екзамен: активний";
+    document.getElementById("startExamBtn").classList.add("opacity-80");
+  } else {
+    if (!confirm("Вийти з режиму екзамену? (таймер зупиниться і прогрес буде збережено)")) return;
+    examMode = false;
+    stopExamTimer();
+    saveState();
+    renderQuiz();
+    document.getElementById("startExamBtn").innerText = "Режим «Екзамен»";
+  }
+});
+
+if (loadState()) {
+
+  if (examMode) {
+    if (examRemaining > 0) startExamTimer();
+    document.getElementById("startExamBtn").innerText = "Екзамен: активний";
+  }
+  renderQuiz();
+} else {
+  renderQuiz();
+}
+
+renderTimer();
+
+window.addEventListener("beforeunload", () => {
+  saveState();
+
+});
+</script>
+</body>
+</html>
