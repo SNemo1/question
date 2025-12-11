@@ -1,0 +1,1528 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Тест — повна версія</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+.option-correct {
+  border-color: #22c55e !important;
+  background-color: #dcfce7 !important;
+  color: #166534 !important;
+}
+.dark .option-correct {
+  border-color: #16a34a !important;
+  background-color: #14532d !important;
+  color: #86efac !important;
+}
+
+.option-wrong {
+  border-color: #ef4444 !important;
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+}
+.dark .option-wrong {
+  border-color: #dc2626 !important;
+  background-color: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+
+.option-selected {
+  border-color: #3b82f6 !important;
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+}
+.dark .option-selected {
+  border-color: #2563eb !important;
+  background-color: #1e3a8a !important;
+  color: #93c5fd !important;
+}
+.butt-header {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 0 5px;
+      background: #9333ea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .butt-header:hover { background: #7e22ce; }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 12px 16px;
+      z-index: 1000;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    nav { display:flex; gap:8px; align-items:center; }
+    body { padding-top:84px; }
+    .dark body { background: #0a101e; }
+    .dark header { background:#0b1220; color:#e6eef8; box-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+    .dark .butt-header { background:#7c3aed; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4 flex items-center justify-center">
+<header>
+  <nav>
+      <a class="butt-header" href="index.html">ЛААГ</a>
+      <a class="butt-header" href="disaine.html">ДИЗАЙН</a>
+      <a class="butt-header" href="algooritm.html">АЛГОРИТМ</a>
+      <a class="butt-header" href="mova.html">МОВА</a>
+  </nav>
+
+  <div class="flex items-center gap-3">
+    <button id="themeToggle" class="butt-header !bg-white !text-purple-700">Тема: Світла</button>
+    <button id="startExamBtn" class="butt-header">Режим «Екзамен»</button>
+  </div>
+</header>
+
+<main class="max-w-3xl w-full">
+  <div id="quiz-container" class="max-w-3xl w-full"></div>
+</main>
+
+<script>
+const QUESTIONS = [
+
+  { 
+    id: 1, 
+    question: "Структура даних – це:", 
+    options: [
+      "спосіб організації та зберігання даних",
+      "послідовність команд для виконання",
+      "мова програмування",
+      "тип змінної"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 2, 
+    question: "Чітка та скінченна послідовність команд (дій), виконання яких приводить до розв'язання поставленої задачі - це:", 
+    options: [
+      "структура даних",
+      "алгоритм",
+      "програма",
+      "функція"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 3, 
+    question: "Виберіть вид коментарів, який відсутній в мові програмування Java:", 
+    options: [
+      "однорядковий коментар //",
+      "багаторядковий коментар /* */",
+      "документаційний коментар /** */",
+      "вкладений коментар /*/* */*/"
+    ], 
+    answer: 4 
+  },
+  { 
+    id: 4, 
+    question: "Тип даних «boolean» в мові програмування Java це:", 
+    options: [
+      "цілочисельний тип",
+      "дробовий тип",
+      "логічний тип (true/false)",
+      "текстовий тип"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 5, 
+    question: "Оператори в мові програмування Java, що призначені для виконання математичних операцій, це:", 
+    options: [
+      "оператори присвоєння",
+      "арифметичні оператори",
+      "логічні оператори",
+      "оператори порівняння"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 6, 
+    question: "Оператори в мові програмування Java, що призначені для надання значень змінним, це:", 
+    options: [
+      "арифметичні оператори",
+      "оператори присвоєння",
+      "логічні оператори",
+      "оператори порівняння"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 7, 
+    question: "Оператори в мові програмування Java, що призначені для прийняття рішень на основі заданих умов, це:", 
+    options: [
+      "арифметичні оператори",
+      "оператори присвоєння",
+      "оператори порівняння",
+      "логічні оператори"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 8, 
+    question: "Оператори в мові програмування Java, що призначені для виконання логічних операцій, це:", 
+    options: [
+      "логічні оператори (&&, ||, !)",
+      "арифметичні оператори",
+      "оператори присвоєння",
+      "оператори порівняння"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 9, 
+    question: "Конструкція в мові програмування Java, що перевіряє істинність певної умови та залежно від результатів перевірки виконує певний код:", 
+    options: [
+      "цикл for",
+      "цикл while",
+      "конструкція if-else",
+      "конструкція switch"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 10, 
+    question: "Конструкція в мові програмування Java, що виконується на основі збігів, визначених користувачем, і дозволяє обробити відразу кілька умов:", 
+    options: [
+      "конструкція if-else",
+      "конструкція switch",
+      "цикл for",
+      "цикл while"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 11, 
+    question: "Виберіть цілочисельний тип даних, розмір якого найменший:", 
+    options: [
+      "int",
+      "long",
+      "byte",
+      "short"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 12, 
+    question: "Виберіть цілочисельний тип даних, розмір якого найбільший:", 
+    options: [
+      "int",
+      "long",
+      "byte",
+      "short"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 13, 
+    question: "Код, який виконується всередині циклу - це:", 
+    options: [
+      "тіло циклу",
+      "умова циклу",
+      "ініціалізація циклу",
+      "ітерація циклу"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 14, 
+    question: "Цикл, який міститься в тілі іншого циклу - це:", 
+    options: [
+      "зовнішній цикл",
+      "вкладений цикл",
+      "паралельний цикл",
+      "послідовний цикл"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 15, 
+    question: "Який цикл в мові програмування Java використовується, коли заздалегідь відома кількість повторень?", 
+    options: [
+      "цикл while",
+      "цикл do-while",
+      "цикл for",
+      "цикл foreach"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 16, 
+    question: "Який цикл в мові програмування Java використовується, коли кількість повторень невідома заздалегідь, але умова перевіряється перед кожною ітерацією циклу?", 
+    options: [
+      "цикл for",
+      "цикл while",
+      "цикл do-while",
+      "цикл foreach"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 17, 
+    question: "Який цикл в мові програмування Java передбачає гарантоване виконання блоку коду хоча б один раз?", 
+    options: [
+      "цикл for",
+      "цикл while",
+      "цикл do-while",
+      "цикл foreach"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 18, 
+    question: "Представлення алгоритму розв'язування або аналізу конкретної задачі за допомогою геометричних елементів, які позначають певні операції, - це:", 
+    options: [
+      "псевдокод",
+      "блок-схема",
+      "програмний код",
+      "текстовий опис"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 19, 
+    question: "Підхід, що передбачає поділ наявного комплексного завдання на окремі дрібніші частини з метою спрощення його реалізації - це:", 
+    options: [
+      "інтеграція",
+      "декомпозиція",
+      "компіляція",
+      "оптимізація"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 20, 
+    question: "Завершальний крок будь-якого алгоритму, що розв'язує задачу методом декомпозиції, передбачає наступну дію:", 
+    options: [
+      "розділення на підзадачі",
+      "аналіз результатів",
+      "об'єднання результатів підзадач",
+      "оптимізація алгоритму"
+    ], 
+    answer: 3 
+  },
+{ 
+  id: 21, 
+  question: "Властивість алгоритму, що передбачає наявність в ньому лише тих команд, які доступні виконавцю і входять у його систему команд – це:", 
+  options: [
+    "зрозумілість",
+    "масовість",
+    "скінченність",
+    "дискретність"
+  ], 
+  answer: 1 
+},
+{ 
+  id: 22, 
+  question: "Властивість алгоритму, що передбачає можливість застосування алгоритму до різних наборів початкових даних – це:", 
+  options: [
+    "зрозумілість",
+    "масовість",
+    "скінченність",
+    "дискретність"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 23, 
+  question: "Властивість алгоритму, що передбачає його завершення після виконання визначеної кількості кроків – це:", 
+  options: [
+    "зрозумілість",
+    "масовість",
+    "скінченність",
+    "дискретність"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 24, 
+  question: "Властивість алгоритму, що передбачає представлення процесу розв'язання задачі у вигляді упорядкованого виконання деяких простих кроків – це:", 
+  options: [
+    "зрозумілість",
+    "масовість",
+    "скінченність",
+    "дискретність"
+  ], 
+  answer: 4 
+},
+{ 
+  id: 25, 
+  question: "Спосіб представлення алгоритмів, що передбачає використання службових слів та спеціальних правил запису окремих дій – це:", 
+  options: [
+    "графічний спосіб",
+    "псевдокод",
+    "програмний код",
+    "словесний опис"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 26, 
+  question: "Спосіб представлення алгоритмів, що полягає у представленні алгоритму за допомогою спеціальних зображень, що містять набір геометричних елементів і графічних символів – це:", 
+  options: [
+    "графічний спосіб (блок-схема)",
+    "псевдокод",
+    "програмний код",
+    "словесний опис"
+  ], 
+  answer: 1 
+},
+{ 
+  id: 27, 
+  question: "Спосіб представлення алгоритмів, що полягає у представленні алгоритму для виконання на ПК у вигляді запису відповідною мовою програмування – це:", 
+  options: [
+    "графічний спосіб",
+    "псевдокод",
+    "програмний код",
+    "словесний опис"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 28, 
+  question: "Найпростіша та найбільш доступна форма представлення алгоритму – це:", 
+  options: [
+    "графічний спосіб",
+    "псевдокод",
+    "програмний код",
+    "словесний опис"
+  ], 
+  answer: 4 
+},
+{ 
+  id: 29, 
+  question: "Графічний спосіб представлення алгоритму передбачає його представлення за допомогою:", 
+  options: [
+    "тексту",
+    "блок-схем",
+    "таблиць",
+    "формул"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 30, 
+  question: "Спосіб псевдокодів для представлення алгоритму передбачає його представлення за допомогою:", 
+  options: [
+    "блок-схем",
+    "службових слів та правил запису",
+    "мови програмування",
+    "графічних символів"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 31, 
+  question: "Перевага блок-схем, що дозволяє перетворити складний текстовий опис алгоритму на зрозумілий візуальний образ – це:", 
+  options: [
+    "наочність",
+    "швидкість створення",
+    "компактність",
+    "простота виконання"
+  ], 
+  answer: 1 
+},
+{ 
+  id: 32, 
+  question: "Що не належить до переваг блок-схем?", 
+  options: [
+    "наочність",
+    "легкість розуміння логіки",
+    "швидкість створення для складних алгоритмів",
+    "можливість документування"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 33, 
+  question: "Форма організації команд (вказівок) в алгоритмі, під час виконання яких дії виконуються послідовно, одна за одною, без пропусків або повторень - це:", 
+  options: [
+    "розгалуження",
+    "цикл",
+    "лінійна структура",
+    "рекурсія"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 34, 
+  question: "Форма організації команд, коли залежно від виконання або невиконання певної умови виконується одна з двох послідовностей команд - це:", 
+  options: [
+    "розгалуження",
+    "цикл",
+    "лінійна структура",
+    "рекурсія"
+  ], 
+  answer: 1 
+},
+{ 
+  id: 35, 
+  question: "Форма організації команд, за якою одна й та сама послідовність дій виконується кілька разів залежно від певної умови - це:", 
+  options: [
+    "розгалуження",
+    "цикл",
+    "лінійна структура",
+    "рекурсія"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 36, 
+  question: "Вкажіть найменування елемента блок-схеми, що відображає вхід у зовнішнє середовище або вихід з нього:", 
+  options: [
+    "процес",
+    "рішення",
+    "термінатор",
+    "з'єднувач"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 37, 
+  question: "Вкажіть найменування елемента блок-схеми, що відображає одну або кілька операцій, обробку даних будь-якого виду:", 
+  options: [
+    "процес",
+    "рішення",
+    "термінатор",
+    "введення/виведення"
+  ], 
+  answer: 1 
+},
+{ 
+  id: 38, 
+  question: "Вкажіть найменування елемента блок-схеми, що відображає обробку умови, рішення або функцію перемикального типу з одним входом і двома або більше альтернативними виходами:", 
+  options: [
+    "процес",
+    "рішення",
+    "термінатор",
+    "введення/виведення"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 39, 
+  question: "Вкажіть найменування елемента блок-схеми, що відображає перетворення у форму, придатну для обробки або відображення результатів обробки:", 
+  options: [
+    "процес",
+    "рішення",
+    "термінатор",
+    "введення/виведення"
+  ], 
+  answer: 4 
+},
+{ 
+  id: 40, 
+  question: "Вкажіть найменування елемента блок-схеми, що відображає вихід в частину блок-схеми і вхід з іншої частини цієї блок-схеми:", 
+  options: [
+    "процес",
+    "рішення",
+    "термінатор",
+    "з'єднувач (конектор)"
+  ], 
+  answer: 4 
+},
+{ 
+  id: 41, 
+  question: "З'єднувачі / конектори блок-схем за межами сторінки повинні бути позначені:", 
+  options: [
+    "кружечками",
+    "літерами",
+    "цифрами",
+    "квадратами"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 42, 
+  question: "З'єднувачі / конектори блок-схем на одній сторінці повинні бути позначені:", 
+  options: [
+    "кружечками",
+    "літерами",
+    "цифрами",
+    "квадратами"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 43, 
+  question: "Впорядкована структура даних, в якій зберігаються елементи одного типу - це:", 
+  options: [
+    "змінна",
+    "масив",
+    "функція",
+    "клас"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 44, 
+  question: "Основна відмінність масивів від звичайної змінної:", 
+  options: [
+    "різний тип даних",
+    "масив зберігає багато елементів одного типу",
+    "масив не можна змінювати",
+    "масив займає менше пам'яті"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 45, 
+  question: "Порядковий номер конкретного елементу масиву - це:", 
+  options: [
+    "значення",
+    "тип",
+    "індекс",
+    "розмір"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 46, 
+  question: "У мові програмування Java масив позначається за допомогою:", 
+  options: [
+    "фігурних дужок {}",
+    "круглих дужок ()",
+    "квадратних дужок []",
+    "кутових дужок <>"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 47, 
+  question: "Яке значення за замовчуванням використовується під час створення порожнього масиву елементів з типом даних int у мові програмування Java?", 
+  options: [
+    "null",
+    "0",
+    "1",
+    "-1"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 48, 
+  question: "Яке значення за замовчуванням використовується під час створення порожнього масиву елементів з типом даних char у мові програмування Java?", 
+  options: [
+    "null",
+    "пробіл ' '",
+    "'\\u0000' (нульовий символ)",
+    "порожній рядок"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 49, 
+  question: "Яке значення за замовчуванням використовується під час створення порожнього масиву елементів з типом даних boolean у мові програмування Java?", 
+  options: [
+    "true",
+    "false",
+    "null",
+    "0"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 50, 
+  question: "Яке значення за замовчуванням використовується під час створення порожнього масиву елементів з типом даних String у мові програмування Java?", 
+  options: [
+    "порожній рядок ''",
+    "null",
+    "пробіл ' '",
+    "0"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 51, 
+  question: "Яке значення за замовчуванням використовується під час створення порожнього масиву елементів з типом даних float у мові програмування Java?", 
+  options: [
+    "null",
+    "1.0",
+    "0.0",
+    "-1.0"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 52, 
+  question: "Яке значення за замовчуванням використовується під час створення порожнього масиву елементів з типом даних double у мові програмування Java?", 
+  options: [
+    "null",
+    "1.0",
+    "0.0",
+    "-1.0"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 53, 
+  question: "Властивість масиву, що дозволяє отримати поточну довжину масиву в мові програмування Java:", 
+  options: [
+    "size",
+    "length",
+    "count",
+    "capacity"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 54, 
+  question: "Яка операція не належить до типових операцій над масивами?", 
+  options: [
+    "додавання елемента",
+    "видалення елемента",
+    "пошук елемента",
+    "автоматичне сортування при додаванні"
+  ], 
+  answer: 4 
+},
+{ 
+  id: 55, 
+  question: "Процес, що передбачає проходження за допомогою циклу по кожному елементу масиву та його порівняння з шуканим значенням, - це:", 
+  options: [
+    "сортування",
+    "лінійний пошук",
+    "бінарний пошук",
+    "фільтрація"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 56, 
+  question: "Який цикл в мові програмування Java використовується, коли потрібно обробити всі елементи масиву?", 
+  options: [
+    "while",
+    "do-while",
+    "for / for-each",
+    "switch"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 57, 
+  question: "Який клас в мові програмування Java надає набір статичних методів для роботи з масивами:", 
+  options: [
+    "Array",
+    "Arrays",
+    "ArrayList",
+    "ArrayUtils"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 58, 
+  question: "Клас «Arrays» в мові програмування Java надає набір статичних методів для роботи з:", 
+  options: [
+    "рядками",
+    "масивами",
+    "списками",
+    "колекціями"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 59, 
+  question: "Метод «Arrays.toString()» в мові програмування Java повертає:", 
+  options: [
+    "розмір масиву",
+    "рядкове представлення масиву",
+    "перший елемент масиву",
+    "відсортований масив"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 60, 
+  question: "Максимальна кількість параметрів, яку приймає метод «Arrays.toString()» в мові програмування Java:", 
+  options: [
+    "0",
+    "1",
+    "2",
+    "3"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 61, 
+  question: "Параметр «arr» методу «Arrays.toString» в мові програмування Java - це:", 
+  options: [
+    "розмір масиву",
+    "індекс елемента",
+    "масив для перетворення в рядок",
+    "значення для пошуку"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 62, 
+  question: "Метод «Arrays.equals()» в мові програмування Java призначений для:", 
+  options: [
+    "сортування масивів",
+    "порівняння двох масивів на рівність",
+    "пошуку елемента",
+    "заповнення масиву"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 63, 
+  question: "Кількість параметрів, яку приймає метод «Arrays.equals()» в мові програмування Java:", 
+  options: [
+    "1",
+    "2",
+    "3",
+    "4"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 64, 
+  question: "Метод «Arrays.sort()» в мові програмування Java призначений для:", 
+  options: [
+    "пошуку елемента",
+    "порівняння масивів",
+    "сортування масиву",
+    "заповнення масиву"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 65, 
+  question: "Максимальна кількість параметрів, яку приймає метод «Arrays.sort()» в мові програмування Java:", 
+  options: [
+    "1",
+    "2",
+    "3",
+    "4"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 66, 
+  question: "Параметр «fromIndex» методу «Arrays.sort()» в мові програмування Java - це:", 
+  options: [
+    "масив для сортування",
+    "початковий індекс для сортування",
+    "кінцевий індекс для сортування",
+    "значення для пошуку"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 67, 
+  question: "Параметр «lastIndex» методу «Arrays.sort()» в мові програмування Java - це:", 
+  options: [
+    "масив для сортування",
+    "початковий індекс для сортування",
+    "кінцевий індекс для сортування (не включно)",
+    "значення для пошуку"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 68, 
+  question: "Параметр «arr» методу «Arrays.sort()» в мові програмування Java - це:", 
+  options: [
+    "масив для сортування",
+    "початковий індекс",
+    "кінцевий індекс",
+    "значення для пошуку"
+  ], 
+  answer: 1 
+},
+{ 
+  id: 69, 
+  question: "Метод «Arrays.fill()» в мові програмування Java призначений для:", 
+  options: [
+    "пошуку елемента",
+    "сортування масиву",
+    "заповнення масиву певним значенням",
+    "порівняння масивів"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 70, 
+  question: "Максимальна кількість параметрів, яку приймає метод «Arrays.fill()» в мові програмування Java:", 
+  options: [
+    "2",
+    "3",
+    "4",
+    "5"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 71, 
+  question: "Параметр «fromIndex» методу «Arrays.fill()» в мові програмування Java - це:", 
+  options: [
+    "масив для заповнення",
+    "початковий індекс для заповнення",
+    "кінцевий індекс для заповнення",
+    "значення для заповнення"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 72, 
+  question: "Параметр «toIndex» методу «Arrays.fill()» в мові програмування Java - це:", 
+  options: [
+    "масив для заповнення",
+    "початковий індекс для заповнення",
+    "кінцевий індекс для заповнення (не включно)",
+    "значення для заповнення"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 73, 
+  question: "Параметр «arr» методу «Arrays.fill()» в мові програмування Java - це:", 
+  options: [
+    "масив для заповнення",
+    "початковий індекс",
+    "кінцевий індекс",
+    "значення для заповнення"
+  ], 
+  answer: 1 
+},
+{ 
+  id: 74, 
+  question: "Параметр «value» методу «Arrays.fill()» в мові програмування Java - це:", 
+  options: [
+    "масив для заповнення",
+    "початковий індекс",
+    "кінцевий індекс",
+    "значення для заповнення масиву"
+  ], 
+  answer: 4 
+},
+{ 
+  id: 75, 
+  question: "Метод «Arrays.binarySearch()» в мові програмування Java призначений для:", 
+  options: [
+    "сортування масиву",
+    "заповнення масиву",
+    "бінарного пошуку елемента в відсортованому масиві",
+    "порівняння масивів"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 76, 
+  question: "У чому полягає призначення процедури пошуку?", 
+  options: [
+    "сортування елементів",
+    "знаходження потрібного елемента в масиві",
+    "видалення елементів",
+    "додавання елементів"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 77, 
+  question: "Максимальна кількість параметрів, яку приймає метод «Arrays.binarySearch()» в мові програмування Java:", 
+  options: [
+    "2",
+    "3",
+    "4",
+    "5"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 78, 
+  question: "Якщо шуканих елементів у масиві декілька, то метод «Arrays.binarySearch()» в мові програмування Java поверне:", 
+  options: [
+    "всі індекси знайдених елементів",
+    "індекс першого знайденого елемента",
+    "індекс останнього знайденого елемента",
+    "індекс будь-якого з знайдених елементів (не гарантовано якого саме)"
+  ], 
+  answer: 4 
+},
+{ 
+  id: 79, 
+  question: "Якщо шуканого елементу у масиві не знайдено, то метод «Arrays.binarySearch()» в мові програмування Java поверне:", 
+  options: [
+    "0",
+    "-1",
+    "від'ємне число (-(точка вставки) - 1)",
+    "null"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 80, 
+  question: "Процес, що передбачає розстановку елементів масиву в заданому порядку, - це:", 
+  options: [
+    "пошук",
+    "сортування",
+    "фільтрація",
+    "індексування"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 81, 
+  question: "Набір кроків, який забезпечує впорядкування набору елементів у певній послідовності - це:", 
+  options: [
+    "алгоритм пошуку",
+    "алгоритм сортування",
+    "алгоритм фільтрації",
+    "алгоритм індексування"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 82, 
+  question: "Алгоритм сортування, що здійснюється шляхом повторюваного переставляння суміжних елементів, якщо вони розташовані в некоректному порядку - це:", 
+  options: [
+    "сортування вибором",
+    "сортування включенням",
+    "сортування бульбашкою (Bubble sort)",
+    "швидке сортування"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 83, 
+  question: "Алгоритм сортування на основі порівнянь, що передбачає розділення масиву на відсортовану і невідсортовану частини, та переміщення елементів на необхідну позицію у відсортованій частині - це:", 
+  options: [
+    "сортування вибором",
+    "сортування включенням (Insertion sort)",
+    "сортування бульбашкою",
+    "швидке сортування"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 84, 
+  question: "Алгоритм сортування, який на кожній ітерації обирає найменший (або найбільший) елемент із невідсортованої частини масиву/списку і переміщує його у відсортовану частину - це:", 
+  options: [
+    "сортування вибором (Selection sort)",
+    "сортування включенням",
+    "сортування бульбашкою",
+    "швидке сортування"
+  ], 
+  answer: 1 
+},
+{ 
+  id: 85, 
+  question: "Скільки додаткових змінних потрібно алгоритму сортування «бульбашкою», що містить N елементів?", 
+  options: [
+    "N змінних",
+    "N-1 змінних",
+    "константна кількість (1-3 змінні)",
+    "жодної додаткової змінної"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 86, 
+  question: "Як залежить швидкість сортування «бульбашкою» від напряму сортування?", 
+  options: [
+    "значно залежить",
+    "трохи залежить",
+    "не залежить",
+    "залежить тільки для великих масивів"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 87, 
+  question: "Масив підлягає сортуванню «бульбашкою». За скільки ітерацій \"найлегший\" елемент в масиві опиниться на своєму місці?", 
+  options: [
+    "за N ітерацій",
+    "за N-1 ітерацій",
+    "за 1 ітерацію",
+    "за log(N) ітерацій"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 88, 
+  question: "Вкажіть складність алгоритму сортування «бульбашкою» (Bubble sort):", 
+  options: [
+    "O(n)",
+    "O(n log n)",
+    "O(n²)",
+    "O(log n)"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 89, 
+  question: "Вкажіть складність алгоритму сортування вибором (Selection sort):", 
+  options: [
+    "O(n)",
+    "O(n log n)",
+    "O(n²)",
+    "O(log n)"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 90, 
+  question: "Вкажіть складність алгоритму сортування включенням (Insertion sort):", 
+  options: [
+    "O(n)",
+    "O(n log n)",
+    "O(n²)",
+    "O(log n)"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 91, 
+  question: "Кількісна оцінка ресурсів, необхідних для виконання алгоритму, що визначає, наскільки ефективно алгоритм розв'язує задачу, використовуючи ресурси комп'ютера - це:", 
+  options: [
+    "швидкість алгоритму",
+    "складність алгоритму",
+    "продуктивність алгоритму",
+    "ефективність алгоритму"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 92, 
+  question: "Спосіб оцінювання продуктивності алгоритму при збільшенні розміру вхідних даних до нескінченності - це:", 
+  options: [
+    "часова складність",
+    "просторова складність",
+    "асимптотична складність",
+    "обчислювальна складність"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 93, 
+  question: "Який фактор не впливає на складність алгоритмів?", 
+  options: [
+    "розмір вхідних даних",
+    "структура алгоритму",
+    "назва змінних у коді",
+    "кількість операцій"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 94, 
+  question: "Який час роботи алгоритму не залежить від обсягу вхідних даних?", 
+  options: [
+    "лінійний O(n)",
+    "квадратичний O(n²)",
+    "константний O(1)",
+    "логарифмічний O(log n)"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 95, 
+  question: "Яку асимптотичну нотацію не застосовують для опису часу роботи алгоритмів із заданим розміром вхідних даних?", 
+  options: [
+    "O-нотація (велике O)",
+    "Ω-нотація (велика Омега)",
+    "Θ-нотація (велика Тета)",
+    "Σ-нотація (велика Сігма)"
+  ], 
+  answer: 4 
+},
+{ 
+  id: 96, 
+  question: "Для оцінки нижньої межі асимптотичної складності алгоритму застосовується:", 
+  options: [
+    "O-нотація",
+    "Ω-нотація (Омега)",
+    "Θ-нотація",
+    "Σ-нотація"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 97, 
+  question: "Для оцінки верхньої межі асимптотичної складності алгоритму застосовується:", 
+  options: [
+    "O-нотація (велике O)",
+    "Ω-нотація",
+    "Θ-нотація",
+    "Σ-нотація"
+  ], 
+  answer: 1 
+},
+{ 
+  id: 98, 
+  question: "Для оцінки точної асимптотичної складності алгоритму, яка знаходиться між нижньою та верхньою межами складності алгоритму, застосовується:", 
+  options: [
+    "O-нотація",
+    "Ω-нотація",
+    "Θ-нотація (Тета)",
+    "Σ-нотація"
+  ], 
+  answer: 3 
+},
+{ 
+  id: 99, 
+  question: "Під час оцінки складності алгоритмів за допомогою О-нотації константний множник заведено:", 
+  options: [
+    "множити на 2",
+    "ігнорувати (відкидати)",
+    "додавати",
+    "підносити до квадрату"
+  ], 
+  answer: 2 
+},
+{ 
+  id: 100, 
+  question: "Що означає швидкість виконання алгоритму O(n²)?", 
+  options: [
+    "лінійна залежність від розміру даних",
+    "логарифмічна залежність від розміру даних",
+    "квадратична залежність від розміру даних",
+    "константна швидкість виконання"
+  ], 
+  answer: 3 
+}
+];
+let currentQuestion = 0;
+let selectedAnswer = null;
+let selectedAnswers = [];
+let score = 0;
+
+let examMode = false;
+const EXAM_SECONDS = 25 * 60; 
+let examRemaining = EXAM_SECONDS;
+let examTimerInterval = null;
+
+const container = document.getElementById("quiz-container");
+const STORAGE_KEY = "quiz_app_state_v1";
+const THEME_KEY = "quiz_theme_v1";
+
+function saveState() {
+  const state = {
+    currentQuestion,
+    selectedAnswer,
+    selectedAnswers,
+    score,
+    examMode,
+    examRemaining,
+    questionsAnswers: QUESTIONS.map(q => q.answer) 
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return false;
+  try {
+    const s = JSON.parse(raw);
+    currentQuestion = s.currentQuestion ?? 0;
+    selectedAnswer = s.selectedAnswer ?? null;
+    selectedAnswers = s.selectedAnswers ?? [];
+    score = s.score ?? 0;
+    examMode = s.examMode ?? false;
+    examRemaining = s.examRemaining ?? EXAM_SECONDS;
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearState() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+    document.getElementById("themeToggle").innerText = "Тема: Темна";
+  } else {
+    document.documentElement.classList.remove("dark");
+    document.getElementById("themeToggle").innerText = "Тема: Світла";
+  }
+  localStorage.setItem(THEME_KEY, theme);
+}
+document.getElementById("themeToggle").addEventListener("click", () => {
+  const current = localStorage.getItem(THEME_KEY) || "light";
+  applyTheme(current === "light" ? "dark" : "light");
+});
+applyTheme(localStorage.getItem(THEME_KEY) || "light");
+
+function startExamTimer() {
+  stopExamTimer();
+  examTimerInterval = setInterval(() => {
+    examRemaining--;
+    renderTimer();
+    saveState();
+    if (examRemaining <= 0) {
+      stopExamTimer();
+      finish(); 
+      alert("Час закінчився. Тест завершено.");
+    }
+  }, 1000);
+}
+
+function stopExamTimer() {
+  if (examTimerInterval) {
+    clearInterval(examTimerInterval);
+    examTimerInterval = null;
+  }
+}
+
+function renderTimer() {
+  const el = document.getElementById("exam-timer");
+  if (!el) return;
+  const mm = String(Math.floor(examRemaining / 60)).padStart(2, "0");
+  const ss = String(examRemaining % 60).padStart(2, "0");
+  el.innerText = `⏱ ${mm}:${ss}`;
+}
+
+function renderQuiz() {
+  container.innerHTML = "";
+  if (currentQuestion >= QUESTIONS.length) return finish();
+
+  const q = QUESTIONS[currentQuestion];
+
+  const wrap = document.createElement("div");
+  wrap.className = "bg-white dark:bg-[#071025] dark:text-slate-100 rounded-2xl shadow-xl p-6 md:p-8";
+
+  wrap.innerHTML = `
+    <div class='mb-6 flex items-start justify-between gap-4'>
+      <div>
+        <h1 class='text-2xl font-bold mb-2'>Тест</h1>
+        <div class='text-sm text-gray-600 dark:text-gray-300'>Питання ${currentQuestion + 1} з ${QUESTIONS.length}</div>
+      </div>
+      <div class='text-right'>
+        <div id='exam-timer' class='text-sm text-gray-600 dark:text-gray-300'></div>
+        <div class='mt-2 text-sm'>
+        </div>
+      </div>
+    </div>
+
+    <h2 class='text-xl font-semibold mb-6'>${escapeHtml(q.question)}</h2>
+    <div id='options' class='space-y-3'></div>
+    <div id='explanation' class='mt-6'></div>
+    <div class='mt-6 flex gap-3'>
+      <button id='nextBtn' class='flex-1 bg-purple-600 text-white py-3 rounded-xl hidden'>Наступне</button>
+      <button id='prevBtn' class='px-4 py-3 border rounded-xl hidden'>Назад</button>
+    </div>
+  `;
+
+  container.appendChild(wrap);
+  const options = document.getElementById('options');
+
+  q.options.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = "w-full p-4 text-left rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900 transition";
+    b.innerText = opt;
+    b.onclick = () => handleSelect(i + 1, b);
+    options.appendChild(b);
+  });
+
+  const prevBtn = document.getElementById("prevBtn");
+  if (currentQuestion > 0) {
+    prevBtn.classList.remove("hidden");
+    prevBtn.onclick = () => {
+      currentQuestion = Math.max(0, currentQuestion - 1);
+      selectedAnswer = null;
+      selectedAnswers = [];
+      renderQuiz();
+    };
+  } else {
+    prevBtn.classList.add("hidden");
+  }
+
+  document.getElementById("saveProgressBtn").onclick = () => {
+    saveState();
+    alert("Прогрес збережено.");
+  };
+  document.getElementById("resetProgressBtn").onclick = () => {
+    if (confirm("Скинути весь прогрес і почати з початку?")) {
+      clearState();
+      location.reload();
+    }
+  };
+
+  renderTimer();
+}
+
+function escapeHtml(str){
+  return str.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+}
+
+function handleSelect(index, btn) {
+  const q = QUESTIONS[currentQuestion];
+  const nextBtn = document.getElementById("nextBtn");
+
+  if (Array.isArray(q.answer)) {
+    if (!selectedAnswers.includes(index)) {
+      selectedAnswers.push(index);
+      btn.classList.add("option-selected");
+    } else {
+      selectedAnswers = selectedAnswers.filter(x => x !== index);
+      btn.classList.remove("border-blue-500", "bg-blue-50");
+    }
+    nextBtn.classList.remove("hidden");
+    nextBtn.onclick = () => checkMultiple();
+    return;
+  }
+
+  if (selectedAnswer !== null) return; 
+  selectedAnswer = index;
+  checkSingle();
+}
+
+function checkSingle() {
+  const q = QUESTIONS[currentQuestion];
+  const explanation = document.getElementById("explanation");
+  const nextBtn = document.getElementById("nextBtn");
+
+  const correct = selectedAnswer === q.answer;
+
+  document.querySelectorAll('#options button').forEach((b, i) => {
+    b.disabled = true;
+    if (i + 1 === q.answer) b.classList.add('option-correct');
+    if (i + 1 === selectedAnswer && !correct) b.classList.add('option-wrong');
+  });
+
+  if (correct) score++;
+  explanation.innerHTML = `<p class='font-semibold'>${correct ? "Правильно" : "Неправильно"}</p>`;
+
+  nextBtn.classList.remove('hidden');
+  nextBtn.onclick = () => { currentQuestion++; selectedAnswer=null; renderQuiz(); saveState(); };
+  saveState();
+}
+
+function checkMultiple() {
+  const q = QUESTIONS[currentQuestion];
+  const explanation = document.getElementById("explanation");
+  const nextBtn = document.getElementById("nextBtn");
+
+  const buttons = document.querySelectorAll('#options button');
+
+  buttons.forEach((b, i) => {
+    b.disabled = true;
+    if (q.answer.includes(i + 1)) b.classList.add('option-correct');
+  });
+
+  selectedAnswers.forEach(sel => {
+   if (!q.answer.includes(sel)) buttons[sel - 1].classList.add('option-wrong');
+  });
+
+  const correct =
+    selectedAnswers.length === q.answer.length &&
+    selectedAnswers.every(v => q.answer.includes(v));
+
+  if (correct) score++;
+
+  explanation.innerHTML = `<p class='font-semibold'>${correct ? "Правильно" : "Неправильно"}</p>`;
+
+  nextBtn.onclick = () => {
+    currentQuestion++;
+    selectedAnswers = [];
+    renderQuiz();
+    saveState();
+  };
+  saveState();
+}
+
+function finish() {
+  stopExamTimer();
+  clearState(); 
+  container.innerHTML = `
+    <div class='bg-white dark:bg-[#071025] rounded-2xl shadow-xl p-8 text-center'>
+      <h2 class='text-3xl font-bold mb-4'>Тест завершено!</h2>
+      <p class='text-xl mb-6'>Ваш результат: ${score} з ${QUESTIONS.length}</p>
+      <div class="flex justify-center gap-4">
+        <button id='retryBtn' class='bg-purple-600 text-white py-3 px-8 rounded-xl'>Пройти знову</button>
+        <button id='viewKeysBtn' class='border py-3 px-6 rounded-xl'>Переглянути правильні відповіді</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("retryBtn").onclick = () => restart();
+  document.getElementById("viewKeysBtn").onclick = () => showAnswerKey();
+}
+
+function restart(){
+  currentQuestion=0; score=0; selectedAnswer=null; selectedAnswers=[]; examMode=false; examRemaining=EXAM_SECONDS;
+  clearState();
+  renderQuiz();
+}
+
+
+function showAnswerKey() {
+  const list = QUESTIONS.map((q, idx) => {
+    let ansText;
+    if (Array.isArray(q.answer)) {
+      ansText = q.answer.map(i => `${i}. ${q.options[i-1]}`).join(" | ");
+    } else {
+      ansText = `${q.answer}. ${q.options[q.answer-1]}`;
+    }
+    return `<li class="mb-2"><strong>Питання ${idx+1}:</strong> ${escapeHtml(q.question)}<br><span class="text-sm text-gray-600 dark:text-gray-300">Правильні відповіді: ${escapeHtml(ansText)}</span></li>`;
+  }).join("");
+  container.innerHTML = `
+    <div class='bg-white dark:bg-[#071025] rounded-2xl shadow-xl p-8'>
+      <h2 class='text-2xl font-bold mb-4'>Ключ відповідей</h2>
+      <ol class='list-decimal ml-6 text-sm'>${list}</ol>
+      <div class='text-center mt-6'>
+        <button id='backToResult' class='bg-purple-600 text-white py-2 px-4 rounded-xl'>Назад</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("backToResult").onclick = () => finish();
+}
+
+document.getElementById("startExamBtn").addEventListener("click", () => {
+  if (!examMode) {
+    if (!confirm("Почати режим «Екзамен» з таймером (20 хв)? Режим блокуватиме зміну відповідей після вибору і буде автоматично завершений по таймеру.")) return;
+    examMode = true;
+    examRemaining = EXAM_SECONDS;
+    startExamTimer();
+ 
+    currentQuestion = 0;
+    score = 0;
+    selectedAnswer = null;
+    selectedAnswers = [];
+    saveState();
+    renderQuiz();
+    document.getElementById("startExamBtn").innerText = "Екзамен: активний";
+    document.getElementById("startExamBtn").classList.add("opacity-80");
+  } else {
+    if (!confirm("Вийти з режиму екзамену? (таймер зупиниться і прогрес буде збережено)")) return;
+    examMode = false;
+    stopExamTimer();
+    saveState();
+    renderQuiz();
+    document.getElementById("startExamBtn").innerText = "Режим «Екзамен»";
+  }
+});
+
+if (loadState()) {
+
+  if (examMode) {
+    if (examRemaining > 0) startExamTimer();
+    document.getElementById("startExamBtn").innerText = "Екзамен: активний";
+  }
+  renderQuiz();
+} else {
+  renderQuiz();
+}
+
+renderTimer();
+
+window.addEventListener("beforeunload", () => {
+  saveState();
+
+});
+</script>
+</body>
+</html>

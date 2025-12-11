@@ -6,8 +6,39 @@
   <title>Тест — повна версія</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-   
-    .butt-header {
+.option-correct {
+  border-color: #22c55e !important;
+  background-color: #dcfce7 !important;
+  color: #166534 !important;
+}
+.dark .option-correct {
+  border-color: #16a34a !important;
+  background-color: #14532d !important;
+  color: #86efac !important;
+}
+
+.option-wrong {
+  border-color: #ef4444 !important;
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+}
+.dark .option-wrong {
+  border-color: #dc2626 !important;
+  background-color: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+
+.option-selected {
+  border-color: #3b82f6 !important;
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+}
+.dark .option-selected {
+  border-color: #2563eb !important;
+  background-color: #1e3a8a !important;
+  color: #93c5fd !important;
+}
+.butt-header {
       display: inline-block;
       padding: 10px 20px;
       margin: 0 5px;
@@ -43,10 +74,10 @@
 <body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4 flex items-center justify-center">
 <header>
   <nav>
-    <a class="butt-header" href="index.html">LAAH</a>
-    <a class="butt-header" href="disaine.html">DISAINE</a>
-    <a class="butt-header" href="">ALGORITM</a>
-    <a class="butt-header" href="mova.html">MOVA</a>
+      <a class="butt-header" href="index.html">ЛААГ</a>
+      <a class="butt-header" href="disaine.html">ДИЗАЙН</a>
+      <a class="butt-header" href="algooritm.html">АЛГОРИТМ</a>
+      <a class="butt-header" href="mova.html">МОВА</a>
   </nav>
 
   <div class="flex items-center gap-3">
@@ -166,7 +197,7 @@ let selectedAnswers = [];
 let score = 0;
 
 let examMode = false;
-const EXAM_SECONDS = 40 * 60; 
+const EXAM_SECONDS = 25 * 60; 
 let examRemaining = EXAM_SECONDS;
 let examTimerInterval = null;
 
@@ -331,7 +362,7 @@ function handleSelect(index, btn) {
   if (Array.isArray(q.answer)) {
     if (!selectedAnswers.includes(index)) {
       selectedAnswers.push(index);
-      btn.classList.add("border-blue-500", "bg-blue-50");
+      btn.classList.add("option-selected");
     } else {
       selectedAnswers = selectedAnswers.filter(x => x !== index);
       btn.classList.remove("border-blue-500", "bg-blue-50");
@@ -355,8 +386,8 @@ function checkSingle() {
 
   document.querySelectorAll('#options button').forEach((b, i) => {
     b.disabled = true;
-    if (i + 1 === q.answer) b.classList.add('border-green-500', 'bg-green-50');
-    if (i + 1 === selectedAnswer && !correct) b.classList.add('border-red-500', 'bg-red-50');
+    if (i + 1 === q.answer) b.classList.add('option-correct');
+    if (i + 1 === selectedAnswer && !correct) b.classList.add('option-wrong');
   });
 
   if (correct) score++;
@@ -376,11 +407,11 @@ function checkMultiple() {
 
   buttons.forEach((b, i) => {
     b.disabled = true;
-    if (q.answer.includes(i + 1)) b.classList.add('border-green-500', 'bg-green-50');
+    if (q.answer.includes(i + 1)) b.classList.add('option-correct');
   });
 
   selectedAnswers.forEach(sel => {
-    if (!q.answer.includes(sel)) buttons[sel - 1].classList.add('border-red-500', 'bg-red-50');
+   if (!q.answer.includes(sel)) buttons[sel - 1].classList.add('option-wrong');
   });
 
   const correct =
