@@ -1,0 +1,1488 @@
+
+
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Тест — повна версія</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+.option-correct {
+  border-color: #22c55e !important;
+  background-color: #dcfce7 !important;
+  color: #166534 !important;
+}
+.dark .option-correct {
+  border-color: #16a34a !important;
+  background-color: #14532d !important;
+  color: #86efac !important;
+}
+
+.option-wrong {
+  border-color: #ef4444 !important;
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+}
+.dark .option-wrong {
+  border-color: #dc2626 !important;
+  background-color: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+
+.option-selected {
+  border-color: #3b82f6 !important;
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+}
+.dark .option-selected {
+  border-color: #2563eb !important;
+  background-color: #1e3a8a !important;
+  color: #93c5fd !important;
+}
+.butt-header {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 0 5px;
+      background: #9333ea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .butt-header:hover { background: #7e22ce; }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 12px 16px;
+      z-index: 1000;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    nav { display:flex; gap:8px; align-items:center; }
+    body { padding-top:84px; }
+    .dark body { background: #0a101e; }
+    .dark header { background:#0b1220; color:#e6eef8; box-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+    .dark .butt-header { background:#7c3aed; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4 flex items-center justify-center">
+<header>
+  <nav>
+      <a class="butt-header" href="index.html">ЛААГ</a>
+      <a class="butt-header" href="disaine.html">ДИЗАЙН</a>
+      <a class="butt-header" href="algooritm.html">АЛГОРИТМ</a>
+      <a class="butt-header" href="mova.html">МОВА</a>
+      <a class="butt-header" href="fizik.html">ФІЗИКА</a>
+  </nav>
+
+  <div class="flex items-center gap-3">
+    <button id="themeToggle" class="butt-header !bg-white !text-purple-700">Тема: Світла</button>
+    <button id="startExamBtn" class="butt-header">Режим «Екзамен»</button>
+  </div>
+</header>
+
+<main class="max-w-3xl w-full">
+  <div id="quiz-container" class="max-w-3xl w-full"></div>
+</main>
+
+<script>
+const QUESTIONS = [
+{ 
+    id: 1, 
+    question: "Що таке електричний заряд? Які види електричних зарядів існують?", 
+    options: [
+      "Маса частинки; важкі та легкі",
+      "Фізична властивість тіл брати участь в електромагнітній взаємодії; позитивні та негативні",
+      "Енергія частинки; кінетична та потенціальна",
+      "Швидкість руху частинки; швидкі та повільні"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 2, 
+    question: "Сформулюйте закон збереження електричного заряду.", 
+    options: [
+      "Заряд може виникати з нічого",
+      "Заряд може зникати безслідно",
+      "Заряд постійно збільшується",
+      "Алгебраїчна сума зарядів електрично ізольованої системи залишається незмінною"
+    ], 
+    answer: 4 
+  },
+  { 
+    id: 3, 
+    question: "Що таке елементарний заряд? Чому дорівнює його значення?", 
+    options: [
+      "Найбільший заряд; e = 1 Кл",
+      "Середній заряд; e = 10⁻⁹ Кл",
+      "Найменший заряд, який існує у природі; e = 1,6·10⁻¹⁹ Кл",
+      "Заряд протона; e = 10⁻¹⁸ Кл"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 4, 
+    question: "Перелічіть основні властивості електричного заряду.", 
+    options: [
+      "Тільки збереження",
+      "Дискретність, збереження, інваріантність, два види зарядів",
+      "Тільки два види зарядів",
+      "Неперервність та змінність"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 5, 
+    question: "Сформулюйте закон Кулона. За яких умов він виконується?", 
+    options: [
+      "Сила прямо пропорційна відстані",
+      "Сила не залежить від величини зарядів",
+      "Сила обернено пропорційна зарядам",
+      "Сила взаємодії між двома точковими зарядами прямо пропорційна добутку зарядів і обернено пропорційна квадрату відстані; для точкових зарядів у вакуумі або діелектрику"
+    ], 
+    answer: 4 
+  },
+  { 
+    id: 6, 
+    question: "Як взаємодіють однойменні та різнойменні заряди?", 
+    options: [
+      "Однойменні притягуються, різнойменні відштовхуються",
+      "Всі заряди притягуються",
+      "Однойменні відштовхуються, різнойменні притягуються",
+      "Всі заряди відштовхуються"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 7, 
+    question: "Що показує діелектрична проникність середовища?", 
+    options: [
+      "У скільки разів сила взаємодії зарядів у середовищі більша, ніж у вакуумі",
+      "У скільки разів сила взаємодії зарядів у середовищі менша, ніж у вакуумі",
+      "Опір середовища",
+      "Провідність середовища"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 8, 
+    question: "Що таке точковий заряд?", 
+    options: [
+      "Заряд розміром 1 мм",
+      "Заряд на кінці провідника",
+      "Заряджене тіло, розмірами якого можна знехтувати порівняно з відстанню до інших тіл",
+      "Найменший можливий заряд"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 9, 
+    question: "Запишіть формулу закону Кулона для вакууму та для діелектрика.", 
+    options: [
+      "F = kq₁q₂/r² (вакуум), F = kq₁q₂/(εr²) (діелектрик)",
+      "F = q₁q₂/r²",
+      "F = kq₁q₂r²",
+      "F = εkq₁q₂/r"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 10, 
+    question: "Чому дорівнює коефіцієнт k у законі Кулона? Як він пов'язаний з електричною сталою?", 
+    options: [
+      "k = 8,85·10⁻¹² Н·м²/Кл²",
+      "k = 9·10⁹ Н·м²/Кл², k = 1/(4πε₀)",
+      "k = 1 Н·м²/Кл²",
+      "k = 3·10⁸ м/с"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 11, 
+    question: "Як обчислити заряд тіла, якщо відомо число надлишкових електронів?", 
+    options: [
+      "q = N/e",
+      "q = N·e, де e - елементарний заряд",
+      "q = N²·e",
+      "q = e/N"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 12, 
+    question: "Чому електростатичне поле є потенціальним?", 
+    options: [
+      "Тому що має високий потенціал",
+      "Тому що створюється потужними зарядами",
+      "Тому що робота поля не залежить від форми траєкторії, а залежить тільки від початкового і кінцевого положення заряду",
+      "Тому що має енергію"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 13, 
+    question: "Що таке потенціал електричного поля? Одиниця вимірювання?", 
+    options: [
+      "Енергія поля; Джоуль",
+      "Скалярна величина, що характеризує енергетичний стан поля; Вольт (В)",
+      "Сила поля; Ньютон",
+      "Заряд поля; Кулон"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 14, 
+    question: "Що називається напругою між двома точками поля?", 
+    options: [
+      "Сума потенціалів",
+      "Добуток потенціалів",
+      "Різниця потенціалів між цими точками",
+      "Відношення зарядів"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 15, 
+    question: "Як зв'язані напруженість і потенціал електричного поля?", 
+    options: [
+      "Напруженість чисельно дорівнює градієнту потенціалу (E = -dφ/dr)",
+      "Потенціал дорівнює напруженості",
+      "Не зв'язані",
+      "Напруженість дорівнює квадрату потенціалу"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 16, 
+    question: "Що таке еквіпотенціальна поверхня? Які її властивості?", 
+    options: [
+      "Поверхня з максимальним потенціалом",
+      "Поверхня, всі точки якої мають однаковий потенціал; силові лінії перпендикулярні до неї",
+      "Поверхня з мінімальним потенціалом",
+      "Поверхня зарядженого тіла"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 17, 
+    question: "Чому робота електричного поля по замкненому контуру дорівнює нулю?", 
+    options: [
+      "Тому що поле слабке",
+      "Тому що немає зарядів",
+      "Тому що поле не існує",
+      "Тому що електростатичне поле є потенціальним (консервативним)"
+    ], 
+    answer: 4 
+  },
+  { 
+    id: 18, 
+    question: "Запишіть формулу потенціалу точкового заряду.", 
+    options: [
+      "φ = kq/r²",
+      "φ = kq/r",
+      "φ = qr/k",
+      "φ = kr/q"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 19, 
+    question: "Як обчислити роботу електричного поля по переміщенню заряду?", 
+    options: [
+      "A = q(φ₁ - φ₂) = qU",
+      "A = qφ",
+      "A = U/q",
+      "A = q/U"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 20, 
+    question: "Як обчислити напруженість однорідного поля через напругу?", 
+    options: [
+      "E = Ud",
+      "E = U/d, де d - відстань між точками",
+      "E = d/U",
+      "E = U²/d"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 21, 
+    question: "Які речовини називають провідниками? Діелектриками?", 
+    options: [
+      "Провідники - речовини з вільними зарядами; Діелектрики - речовини без вільних зарядів",
+      "Провідники - тверді речовини; Діелектрики - рідкі",
+      "Провідники - метали; Діелектрики - всі інші",
+      "Однакові речовини"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 22, 
+    question: "Які властивості має провідник в електростатичному полі?", 
+    options: [
+      "Поле всередині провідника відмінне від нуля",
+      "Потенціал змінюється всередині",
+      "Заряди розташовані рівномірно по об'єму",
+      "Поле всередині дорівнює нулю, весь заряд на поверхні, поверхня еквіпотенціальна"
+    ], 
+    answer: 4 
+  },
+  { 
+    id: 23, 
+    question: "Що таке електростатична індукція?", 
+    options: [
+      "Явище перерозподілу зарядів у провіднику під дією зовнішнього поля",
+      "Створення струму",
+      "Нагрівання провідника",
+      "Охолодження провідника"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 24, 
+    question: "На чому ґрунтується електростатичний захист?", 
+    options: [
+      "На використанні діелектриків",
+      "На високій напрузі",
+      "На тому, що поле всередині порожнистого провідника дорівнює нулю (клітка Фарадея)",
+      "На магнітному полі"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 25, 
+    question: "Які типи діелектриків ви знаєте? Наведіть приклади.", 
+    options: [
+      "Полярні (вода, спирт) та неполярні (повітря, скло)",
+      "Тільки полярні",
+      "Тільки неполярні",
+      "Металеві та неметалеві"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 26, 
+    question: "Що таке поляризація діелектрика?", 
+    options: [
+      "Нагрівання діелектрика",
+      "Зміна кольору",
+      "Орієнтація або зміщення зарядів під дією зовнішнього поля",
+      "Розплавлення діелектрика"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 27, 
+    question: "Як діелектрик впливає на електричне поле?", 
+    options: [
+      "Посилює поле в ε разів",
+      "Не впливає",
+      "Ослаблює поле в ε разів",
+      "Змінює напрямок поля"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 28, 
+    question: "Як записується закон Кулона для зарядів у діелектрику?", 
+    options: [
+      "F = kq₁q₂/(εr²), де ε - діелектрична проникність",
+      "F = εkq₁q₂/r²",
+      "F = kq₁q₂/r²",
+      "F = kq₁q₂ε/r"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 29, 
+    question: "Що показує діелектрична проникність? Як вона позначається?", 
+    options: [
+      "Опір речовини; R",
+      "У скільки разів ослаблюється поле в речовині порівняно з вакуумом; ε",
+      "Провідність; σ",
+      "Ємність; C"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 30, 
+    question: "Що таке конденсатор? Для чого він призначений?", 
+    options: [
+      "Пристрій для створення магнітного поля",
+      "Система з двох провідників, розділених діелектриком, для накопичення заряду та енергії",
+      "Джерело струму",
+      "Вимірювальний прилад"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 31, 
+    question: "Що називається електроємністю конденсатора?", 
+    options: [
+      "Енергія конденсатора",
+      "Відношення заряду до напруги: C = q/U",
+      "Об'єм конденсатора",
+      "Маса конденсатора"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 32, 
+    question: "Від чого залежить ємність плоского конденсатора?", 
+    options: [
+      "Від площі пластин S, відстані між ними d та діелектричної проникності ε",
+      "Тільки від напруги",
+      "Тільки від заряду",
+      "Від температури"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 33, 
+    question: "Як з'єднують конденсатори послідовно? Паралельно?", 
+    options: [
+      "Послідовно - «+» до «-»; Паралельно - всі «+» разом, всі «-» разом",
+      "Навпаки",
+      "Однаково",
+      "Не можна з'єднувати"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 34, 
+    question: "Як обчислити загальну ємність при послідовному з'єднанні?", 
+    options: [
+      "C = C₁ + C₂",
+      "C = C₁·C₂",
+      "1/C = 1/C₁ + 1/C₂",
+      "C = C₁ - C₂"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 35, 
+    question: "Як обчислити загальну ємність при паралельному з'єднанні?", 
+    options: [
+      "1/C = 1/C₁ + 1/C₂",
+      "C = C₁ + C₂ + C₃ + ...",
+      "C = C₁·C₂",
+      "C = C₁/C₂"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 36, 
+    question: "Запишіть формули для енергії зарядженого конденсатора.", 
+    options: [
+      "W = qU/2 = CU²/2 = q²/(2C)",
+      "W = qU",
+      "W = CU",
+      "W = q/C"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 37, 
+    question: "Запишіть формулу ємності плоского конденсатора.", 
+    options: [
+      "C = ε₀εS/d",
+      "C = Sd/ε₀ε",
+      "C = ε₀εd/S",
+      "C = S/(ε₀εd)"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 38, 
+    question: "Як зміниться ємність конденсатора, якщо відстань між пластинами збільшити у 2 рази?", 
+    options: [
+      "Збільшиться у 2 рази",
+      "Зменшиться у 2 рази",
+      "Не зміниться",
+      "Збільшиться у 4 рази"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 39, 
+    question: "Як зміниться ємність, якщо між пластинами помістити діелектрик?", 
+    options: [
+      "Не зміниться",
+      "Зменшиться в ε разів",
+      "Збільшиться в ε разів",
+      "Зменшиться вдвічі"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 40, 
+    question: "Що таке електричний струм?", 
+    options: [
+      "Напруга в колі",
+      "Опір провідника",
+      "Впорядкований рух заряджених частинок",
+      "Електричне поле"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 41, 
+    question: "Які умови необхідні для існування електричного струму?", 
+    options: [
+      "Наявність вільних зарядів та електричного поля (різниці потенціалів)",
+      "Тільки вільні заряди",
+      "Тільки електричне поле",
+      "Високий опір"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 42, 
+    question: "Що називається силою струму? Одиниця вимірювання?", 
+    options: [
+      "Напруга в колі; Вольт",
+      "Заряд, що проходить через переріз провідника за одиницю часу; Ампер (А)",
+      "Опір провідника; Ом",
+      "Потужність; Ват"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 43, 
+    question: "Яким приладом вимірюють силу струму? Як його вмикають у коло?", 
+    options: [
+      "Вольтметром; паралельно",
+      "Амперметром; послідовно",
+      "Омметром; довільно",
+      "Ватметром; паралельно"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 44, 
+    question: "Що називається напругою? Одиниця вимірювання?", 
+    options: [
+      "Сила струму; Ампер",
+      "Робота електричного поля по переміщенню одиничного заряду; Вольт (В)",
+      "Опір; Ом",
+      "Заряд; Кулон"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 45, 
+    question: "Яким приладом вимірюють напругу? Як його вмикають у коло?", 
+    options: [
+      "Амперметром; послідовно",
+      "Вольтметром; паралельно",
+      "Омметром; послідовно",
+      "Ватметром; послідовно"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 46, 
+    question: "Сформулюйте закон Ома для ділянки кола.", 
+    options: [
+      "I = U·R",
+      "I = U/R (сила струму прямо пропорційна напрузі і обернено пропорційна опору)",
+      "I = R/U",
+      "U = I·R²"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 47, 
+    question: "Від чого залежить опір провідника?", 
+    options: [
+      "Від питомого опору ρ, довжини l та площі перерізу S: R = ρl/S",
+      "Тільки від довжини",
+      "Тільки від площі",
+      "Від напруги"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 48, 
+    question: "Як залежить опір від температури?", 
+    options: [
+      "Не залежить",
+      "Зменшується при нагріванні",
+      "Для металів збільшується при нагріванні",
+      "Залежить тільки від матеріалу"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 49, 
+    question: "Що таке надпровідність?", 
+    options: [
+      "Дуже високий опір",
+      "Явище зникнення електричного опору при низьких температурах",
+      "Високий струм",
+      "Висока напруга"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 50, 
+    question: "Як змінюється сила струму при послідовному з'єднанні провідників?", 
+    options: [
+      "Зменшується",
+      "Збільшується",
+      "Однакова у всіх провідниках",
+      "Дорівнює нулю"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 51, 
+    question: "Як обчислити загальний опір при послідовному з'єднанні?", 
+    options: [
+      "1/R = 1/R₁ + 1/R₂",
+      "R = R₁·R₂",
+      "R = R₁ + R₂ + R₃ + ...",
+      "R = R₁ - R₂"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 52, 
+    question: "Як розподіляється напруга при послідовному з'єднанні?", 
+    options: [
+      "Однакова на всіх резисторах",
+      "U = U₁ + U₂ + U₃ + ... (напруги додаються)",
+      "U = U₁·U₂",
+      "U = 0"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 53, 
+    question: "Як змінюється напруга при паралельному з'єднанні провідників?", 
+    options: [
+      "Різна на різних гілках",
+      "Дорівнює нулю",
+      "Однакова на всіх провідниках",
+      "Змінюється з часом"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 54, 
+    question: "Як обчислити загальний опір при паралельному з'єднанні?", 
+    options: [
+      "R = R₁ + R₂",
+      "1/R = 1/R₁ + 1/R₂ + 1/R₃ + ...",
+      "R = R₁·R₂",
+      "R = R₁/R₂"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 55, 
+    question: "Як розподіляється струм при паралельному з'єднанні?", 
+    options: [
+      "Однаковий в усіх гілках",
+      "I = I₁ + I₂ + I₃ + ... (струми додаються)",
+      "I = I₁·I₂",
+      "I = 0"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 56, 
+    question: "Що називається ЕРС джерела струму?", 
+    options: [
+      "Опір джерела",
+      "Струм джерела",
+      "Робота сторонніх сил по переміщенню одиничного заряду",
+      "Потужність джерела"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 57, 
+    question: "Що таке сторонні сили? Наведіть приклади.", 
+    options: [
+      "Електростатичні сили",
+      "Сили, що діють всередині джерела і переміщують заряди проти електричного поля; хімічні, механічні",
+      "Сили тертя",
+      "Гравітаційні сили"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 58, 
+    question: "Сформулюйте закон Ома для повного кола.", 
+    options: [
+      "I = ξ/(R + r), де ξ - ЕРС, R - зовнішній опір, r - внутрішній опір",
+      "I = ξ/R",
+      "I = ξ·r",
+      "I = R/ξ"
+    ], 
+    answer: 1 
+  },
+  { 
+    id: 59, 
+    question: "Що називається внутрішнім опором джерела?", 
+    options: [
+      "Опір зовнішнього кола",
+      "Опір самого джерела струму",
+      "Загальний опір",
+      "Опір провідників"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 60, 
+    question: "Як зв'язані напруга на зовнішній ділянці і ЕРС джерела?", 
+    options: [
+      "U = ξ",
+      "U = ξ + Ir",
+      "U = ξ - Ir",
+      "U = ξ/r"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 61, 
+    question: "Що таке коротке замикання? Чому воно небезпечне?", 
+    options: [
+      "Нормальний режим роботи",
+      "З'єднання полюсів джерела провідником з дуже малим опором; небезпечне через дуже великий струм",
+      "Розрив кола",
+      "Висока напруга"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 62, 
+    question: "Що таке режим холостого ходу?", 
+    options: [
+      "Коротке замикання",
+      "Розірване зовнішнє коло, струм відсутній",
+      "Максимальний струм",
+      "Нормальна робота"
+    ], 
+    answer: 2 
+  },
+  { 
+    id: 63, 
+    question: "Як виміряти ЕРС джерела за допомогою вольтметра?", 
+    options: [
+      "При короткому замиканні",
+      "При великому струмі",
+      "При холостому ході (розімкнене коло), вольтметр покаже ЕРС",
+      "Неможливо виміряти"
+    ], 
+    answer: 3 
+  },
+  { 
+    id: 64, 
+    question: "Запишіть закон0ма для повного кола.",
+      options: [
+      "I = ξ/(R + r)",
+      "I = ξ/R",
+      "I = ξr",
+      "I = R + r"
+      ],
+      answer: 1
+      },
+      {
+      id: 65,
+      question: "Як обчислити силу струму короткого замикання?",
+      options: [
+      "I = ξ·r",
+      "I = ξ/r (при R = 0)",
+      "I = 0",
+      "I = ξ + r"
+      ],
+      answer: 2
+      },
+      {
+      id: 66,
+      question: "Чому дорівнює напруга на зовнішній ділянці при холостому ході?",
+      options: [
+      "U = 0",
+      "U = Ir",
+      "U = ξ (дорівнює ЕРС)",
+      "U = ξ/2"
+      ],
+      answer: 3
+      },
+      {
+      id: 67,
+      question: "Як з'єднують джерела послідовно? Паралельно?",
+      options: [
+      "Послідовно: «+» до «-», ЕРС додаються; Паралельно: всі «+» разом, всі «-» разом",
+      "Навпаки",
+      "Однаково",
+      "Не можна з'єднувати"
+      ],
+      answer: 1
+      },
+      {
+      id: 68,
+      question: "Що називається вузлом електричного кола?",
+      options: [
+      "Джерело струму",
+      "Резистор",
+      "Точка з'єднання трьох або більше провідників",
+      "Кінець провідника"
+      ],
+      answer: 3
+      },
+      {
+      id: 69,
+      question: "Сформулюйте перше правило Кірхгофа.",
+      options: [
+      "Сума ЕРС дорівнює сумі опорів",
+      "Алгебраїчна сума струмів у вузлі дорівнює нулю (ΣI = 0)",
+      "Струми завжди однакові",
+      "Напруги завжди однакові"
+      ],
+      answer: 2
+      },
+      {
+      id: 70,
+      question: "Наслідком якого закону є перше правило Кірхгофа?",
+      options: [
+      "Закону Ома",
+      "Закону збереження енергії",
+      "Закону збереження заряду",
+      "Закону Кулона"
+      ],
+      answer: 3
+      },
+      {
+      id: 71,
+      question: "Сформулюйте друге правило Кірхгофа.",
+      options: [
+      "Сума струмів дорівнює нулю",
+      "У замкненому контурі алгебраїчна сума ЕРС дорівнює алгебраїчній сумі падінь напруги (Σξ = ΣIR)",
+      "Опори завжди додаються",
+      "ЕРС завжди дорівнюють"
+      ],
+      answer: 2
+      },
+      {
+      id: 72,
+      question: "Які правила визначення знаків у другому правилі Кірхгофа?",
+      options: [
+      "Всі знаки позитивні",
+      "Вибирається напрямок обходу контуру; ЕРС і струми, співпадаючі з обходом, беруться зі знаком «+»",
+      "Всі знаки негативні",
+      "Знаки не мають значення"
+      ],
+      answer: 2
+      },
+      {
+      id: 73,
+      question: "Скільки незалежних рівнянь можна скласти за першим правилом для кола з N вузлів?",
+      options: [
+      "N рівнянь",
+      "2N рівнянь",
+      "N - 1 рівнянь",
+      "N + 1 рівнянь"
+      ],
+      answer: 3
+      },
+      {
+      id: 74,
+      question: "Яка послідовність дій при розв'язуванні задач за допомогою правил Кірхгофа?",
+      options: [
+      "Позначити струми, вибрати контури, скласти рівняння, розв'язати систему",
+      "Одразу розв'язувати",
+      "Тільки використати закон Ома",
+      "Виміряти все приладами"
+      ],
+      answer: 1
+      },
+      {
+      id: 75,
+      question: "Що називається роботою електричного струму?",
+      options: [
+      "Заряд, що пройшов",
+      "Енергія, що виділяється або перетворюється при проходженні струму: A = UIt",
+      "Сила струму",
+      "Опір кола"
+      ],
+      answer: 2
+      },
+      {
+      id: 76,
+      question: "За якими формулами можна обчислити роботу струму?",
+      options: [
+      "A = UIt = I²Rt = U²t/R",
+      "A = It",
+      "A = UR",
+      "A = I/U"
+      ],
+      answer: 1
+      },
+      {
+      id: 77,
+      question: "Які одиниці вимірювання роботи струму ви знаєте?",
+      options: [
+      "Джоуль (Дж), кіловат-година (кВт·год)",
+      "Ватт",
+      "Ампер",
+      "Вольт"
+      ],
+      answer: 1
+      },
+      {
+      id: 78,
+      question: "Що вимірює електролічильник?",
+      options: [
+      "Силу струму",
+      "Напругу",
+      "Роботу (енергію) електричного струму",
+      "Опір"
+      ],
+      answer: 3
+      },
+      {
+      id: 79,
+      question: "Що називається потужністю електричного струму?",
+      options: [
+      "Заряд за секунду",
+      "Робота за одиницю часу: P = A/t = UI",
+      "Опір кола",
+      "Напруга в колі"
+      ],
+      answer: 2
+      },
+      {
+      id: 80,
+      question: "Яким приладом вимірюють потужність?",
+      options: [
+      "Амперметром",
+      "Вольтметром",
+      "Ватметром",
+      "Омметром"
+      ],
+      answer: 3
+      },
+      {
+      id: 81,
+      question: "При якій умові на зовнішній ділянці виділяється максимальна потужність?",
+      options: [
+      "При R >> r",
+      "При R << r",
+      "При R = r (опір навантаження дорівнює внутрішньому опору)",
+      "При R = 0"
+      ],
+      answer: 3
+      },
+      {
+      id: 82,
+      question: "Як обчислити ККД джерела струму?",
+      options: [
+      "η = U/ξ = R/(R + r)",
+      "η = ξ/U",
+      "η = r/R",
+      "η = I/U"
+      ],
+      answer: 1
+      },
+      {
+      id: 83,
+      question: "Сформулюйте закон Джоуля-Ленца.",
+      options: [
+      "Кількість теплоти, що виділяється в провіднику, прямо пропорційна квадрату сили струму, опору і часу: Q = I²Rt",
+      "Q = It",
+      "Q = UR",
+      "Q = I/R"
+      ],
+      answer: 1
+      },
+      {
+      id: 84,
+      question: "У якому випадку можна використовувати формулу Q = UIt?",
+      options: [
+      "Завжди",
+      "Ніколи",
+      "Тільки коли вся робота перетворюється в теплоту (немає механічної роботи)",
+      "Тільки при великих струмах"
+      ],
+      answer: 3
+      },
+      {
+      id: 85,
+      question: "При якому з'єднанні більша кількість теплоти виділяється на більшому опорі?",
+      options: [
+      "При паралельному",
+      "При змішаному",
+      "При послідовному",
+      "Однаково"
+      ],
+      answer: 3
+      },
+      {
+      id: 86,
+      question: "При якому з'єднанні більша кількість теплоти виділяється на меншому опорі?",
+      options: [
+      "При послідовному",
+      "При паралельному",
+      "Однаково",
+      "Залежить від напруги"
+      ],
+      answer: 2
+      },
+      {
+      id: 87,
+      question: "Запишіть усі формули для обчислення роботи струму.",
+      options: [
+      "A = UIt = I²Rt = U²t/R",
+      "A = It",
+      "A = I²t",
+      "A = Ut"
+      ],
+      answer: 1
+      },
+      {
+      id: 88,
+      question: "Запишіть формули для обчислення потужності струму.",
+      options: [
+      "P = I/U",
+      "P = UI = I²R = U²/R",
+      "P = It",
+      "P = Ut"
+      ],
+      answer: 2
+      },
+      {
+      id: 89,
+      question: "Запишіть закон Джоуля-Ленца.",
+      options: [
+      "Q = UIt",
+      "Q = I²Rt",
+      "Q = Ut",
+      "Q = IR"
+      ],
+      answer: 2
+      },
+      {
+      id: 90,
+      question: "Поясніть, чому при послідовному з'єднанні резисторів загальна напруга дорівнює сумі напруг, а при паралельному – загальний струм дорівнює сумі струмів?",
+      options: [
+      "Це випадкова закономірність",
+      "При послідовному: струм однаковий, напруги додаються за законом Ома; При паралельному: напруга однакова, струми додаються за законом збереження заряду",
+      "Тому що так зручніше",
+      "Через високий опір"
+      ],
+      answer: 2
+      },
+      {
+      id: 91,
+      question: "Чому ККД джерела струму завжди менший за 100%? При яких умовах він максимальний?",
+      options: [
+      "Через втрати на внутрішньому опорі; максимальний при мінімальному струмі (R >> r)",
+      "Через високу напругу",
+      "Через низький опір",
+      "ККД може бути 100%"
+      ],
+      answer: 1
+      },
+      {
+      id: 92,
+      question: "Поясніть фізичний зміст діелектричної проникності речовини.",
+      options: [
+      "Це густина речовини",
+      "Показує, у скільки разів поле в речовині слабше, ніж у вакуумі, через поляризацію діелектрика",
+      "Це опір речовини",
+      "Це температура речовини"
+      ],
+      answer: 2
+      },
+      {
+      id: 93,
+      question: "Чому напруженість електричного поля напрямлена в бік убування потенціалу?",
+      options: [
+      "Тому що так зручніше",
+      "Тому що позитивний заряд рухається від більшого потенціалу до меншого, а сила й напруженість співпадають з напрямком руху позитивного заряду",
+      "Це випадкова закономірність",
+      "Тому що потенціал завжди зменшується"
+      ],
+      answer: 2
+      },
+      {
+      id: 94,
+      question: "Поясніть, чому при короткому замиканні вся потужність виділяється всередині джерела струму?",
+      options: [
+      "Тому що зовнішній опір дуже малий (R ≈ 0), і вся напруга падає на внутрішньому опорі",
+      "Тому що струм дуже малий",
+      "Тому що напруга дуже велика",
+      "Це неправда"
+      ],
+      answer: 1
+      },
+      {
+      id: 95,
+      question: "У чому полягає відмінність між однорідною і неоднорідною ділянками електричного кола?",
+      options: [
+      "В опорі",
+      "В струмі",
+      "Однорідна не містить ЕРС (тільки опір), неоднорідна містить ЕРС (джерело струму)",
+      "В напрузі"
+      ],
+      answer: 3
+      },
+      {
+      id: 96,
+      question: "Чому електростатичне поле називають потенціальним?",
+      options: [
+      "Тому що має високий потенціал",
+      "Тому що робота по замкненому контуру дорівнює нулю (консервативне поле)",
+      "Тому що створює напругу",
+      "Тому що має енергію"
+      ],
+      answer: 2
+      }
+
+];
+let currentQuestion = 0;
+let selectedAnswer = null;
+let selectedAnswers = [];
+let score = 0;
+
+let examMode = false;
+const EXAM_SECONDS = 25 * 60; 
+let examRemaining = EXAM_SECONDS;
+let examTimerInterval = null;
+
+const container = document.getElementById("quiz-container");
+const STORAGE_KEY = "quiz_app_state_v1";
+const THEME_KEY = "quiz_theme_v1";
+
+function saveState() {
+  const state = {
+    currentQuestion,
+    selectedAnswer,
+    selectedAnswers,
+    score,
+    examMode,
+    examRemaining,
+    questionsAnswers: QUESTIONS.map(q => q.answer) 
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return false;
+  try {
+    const s = JSON.parse(raw);
+    currentQuestion = s.currentQuestion ?? 0;
+    selectedAnswer = s.selectedAnswer ?? null;
+    selectedAnswers = s.selectedAnswers ?? [];
+    score = s.score ?? 0;
+    examMode = s.examMode ?? false;
+    examRemaining = s.examRemaining ?? EXAM_SECONDS;
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearState() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+    document.getElementById("themeToggle").innerText = "Тема: Темна";
+  } else {
+    document.documentElement.classList.remove("dark");
+    document.getElementById("themeToggle").innerText = "Тема: Світла";
+  }
+  localStorage.setItem(THEME_KEY, theme);
+}
+document.getElementById("themeToggle").addEventListener("click", () => {
+  const current = localStorage.getItem(THEME_KEY) || "light";
+  applyTheme(current === "light" ? "dark" : "light");
+});
+applyTheme(localStorage.getItem(THEME_KEY) || "light");
+
+function startExamTimer() {
+  stopExamTimer();
+  examTimerInterval = setInterval(() => {
+    examRemaining--;
+    renderTimer();
+    saveState();
+    if (examRemaining <= 0) {
+      stopExamTimer();
+      finish(); 
+      alert("Час закінчився. Тест завершено.");
+    }
+  }, 1000);
+}
+
+function stopExamTimer() {
+  if (examTimerInterval) {
+    clearInterval(examTimerInterval);
+    examTimerInterval = null;
+  }
+}
+
+function renderTimer() {
+  const el = document.getElementById("exam-timer");
+  if (!el) return;
+  const mm = String(Math.floor(examRemaining / 60)).padStart(2, "0");
+  const ss = String(examRemaining % 60).padStart(2, "0");
+  el.innerText = `⏱ ${mm}:${ss}`;
+}
+
+function renderQuiz() {
+  container.innerHTML = "";
+  if (currentQuestion >= QUESTIONS.length) return finish();
+
+  const q = QUESTIONS[currentQuestion];
+
+  const wrap = document.createElement("div");
+  wrap.className = "bg-white dark:bg-[#071025] dark:text-slate-100 rounded-2xl shadow-xl p-6 md:p-8";
+
+  wrap.innerHTML = `
+    <div class='mb-6 flex items-start justify-between gap-4'>
+      <div>
+        <h1 class='text-2xl font-bold mb-2'>Тест</h1>
+        <div class='text-sm text-gray-600 dark:text-gray-300'>Питання ${currentQuestion + 1} з ${QUESTIONS.length}</div>
+      </div>
+      <div class='text-right'>
+        <div id='exam-timer' class='text-sm text-gray-600 dark:text-gray-300'></div>
+        <div class='mt-2 text-sm'>
+        </div>
+      </div>
+    </div>
+
+    <h2 class='text-xl font-semibold mb-6'>${escapeHtml(q.question)}</h2>
+    <div id='options' class='space-y-3'></div>
+    <div id='explanation' class='mt-6'></div>
+    <div class='mt-6 flex gap-3'>
+      <button id='nextBtn' class='flex-1 bg-purple-600 text-white py-3 rounded-xl hidden'>Наступне</button>
+      <button id='prevBtn' class='px-4 py-3 border rounded-xl hidden'>Назад</button>
+    </div>
+  `;
+
+  container.appendChild(wrap);
+  const options = document.getElementById('options');
+
+  q.options.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = "w-full p-4 text-left rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900 transition";
+    b.innerText = opt;
+    b.onclick = () => handleSelect(i + 1, b);
+    options.appendChild(b);
+  });
+
+  const prevBtn = document.getElementById("prevBtn");
+  if (currentQuestion > 0) {
+    prevBtn.classList.remove("hidden");
+    prevBtn.onclick = () => {
+      currentQuestion = Math.max(0, currentQuestion - 1);
+      selectedAnswer = null;
+      selectedAnswers = [];
+      renderQuiz();
+    };
+  } else {
+    prevBtn.classList.add("hidden");
+  }
+
+  document.getElementById("saveProgressBtn").onclick = () => {
+    saveState();
+    alert("Прогрес збережено.");
+  };
+  document.getElementById("resetProgressBtn").onclick = () => {
+    if (confirm("Скинути весь прогрес і почати з початку?")) {
+      clearState();
+      location.reload();
+    }
+  };
+
+  renderTimer();
+}
+
+function escapeHtml(str){
+  return str.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+}
+
+function handleSelect(index, btn) {
+  const q = QUESTIONS[currentQuestion];
+  const nextBtn = document.getElementById("nextBtn");
+
+  if (Array.isArray(q.answer)) {
+    if (!selectedAnswers.includes(index)) {
+      selectedAnswers.push(index);
+      btn.classList.add("option-selected");
+    } else {
+      selectedAnswers = selectedAnswers.filter(x => x !== index);
+      btn.classList.remove("border-blue-500", "bg-blue-50");
+    }
+    nextBtn.classList.remove("hidden");
+    nextBtn.onclick = () => checkMultiple();
+    return;
+  }
+
+  if (selectedAnswer !== null) return; 
+  selectedAnswer = index;
+  checkSingle();
+}
+
+function checkSingle() {
+  const q = QUESTIONS[currentQuestion];
+  const explanation = document.getElementById("explanation");
+  const nextBtn = document.getElementById("nextBtn");
+
+  const correct = selectedAnswer === q.answer;
+
+  document.querySelectorAll('#options button').forEach((b, i) => {
+    b.disabled = true;
+    if (i + 1 === q.answer) b.classList.add('option-correct');
+    if (i + 1 === selectedAnswer && !correct) b.classList.add('option-wrong');
+  });
+
+  if (correct) score++;
+  explanation.innerHTML = `<p class='font-semibold'>${correct ? "Правильно" : "Неправильно"}</p>`;
+
+  nextBtn.classList.remove('hidden');
+  nextBtn.onclick = () => { currentQuestion++; selectedAnswer=null; renderQuiz(); saveState(); };
+  saveState();
+}
+
+function checkMultiple() {
+  const q = QUESTIONS[currentQuestion];
+  const explanation = document.getElementById("explanation");
+  const nextBtn = document.getElementById("nextBtn");
+
+  const buttons = document.querySelectorAll('#options button');
+
+  buttons.forEach((b, i) => {
+    b.disabled = true;
+    if (q.answer.includes(i + 1)) b.classList.add('option-correct');
+  });
+
+  selectedAnswers.forEach(sel => {
+   if (!q.answer.includes(sel)) buttons[sel - 1].classList.add('option-wrong');
+  });
+
+  const correct =
+    selectedAnswers.length === q.answer.length &&
+    selectedAnswers.every(v => q.answer.includes(v));
+
+  if (correct) score++;
+
+  explanation.innerHTML = `<p class='font-semibold'>${correct ? "Правильно" : "Неправильно"}</p>`;
+
+  nextBtn.onclick = () => {
+    currentQuestion++;
+    selectedAnswers = [];
+    renderQuiz();
+    saveState();
+  };
+  saveState();
+}
+
+function finish() {
+  stopExamTimer();
+  clearState(); 
+  container.innerHTML = `
+    <div class='bg-white dark:bg-[#071025] rounded-2xl shadow-xl p-8 text-center'>
+      <h2 class='text-3xl font-bold mb-4'>Тест завершено!</h2>
+      <p class='text-xl mb-6'>Ваш результат: ${score} з ${QUESTIONS.length}</p>
+      <div class="flex justify-center gap-4">
+        <button id='retryBtn' class='bg-purple-600 text-white py-3 px-8 rounded-xl'>Пройти знову</button>
+        <button id='viewKeysBtn' class='border py-3 px-6 rounded-xl'>Переглянути правильні відповіді</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("retryBtn").onclick = () => restart();
+  document.getElementById("viewKeysBtn").onclick = () => showAnswerKey();
+}
+
+function restart(){
+  currentQuestion=0; score=0; selectedAnswer=null; selectedAnswers=[]; examMode=false; examRemaining=EXAM_SECONDS;
+  clearState();
+  renderQuiz();
+}
+
+
+function showAnswerKey() {
+  const list = QUESTIONS.map((q, idx) => {
+    let ansText;
+    if (Array.isArray(q.answer)) {
+      ansText = q.answer.map(i => `${i}. ${q.options[i-1]}`).join(" | ");
+    } else {
+      ansText = `${q.answer}. ${q.options[q.answer-1]}`;
+    }
+    return `<li class="mb-2"><strong>Питання ${idx+1}:</strong> ${escapeHtml(q.question)}<br><span class="text-sm text-gray-600 dark:text-gray-300">Правильні відповіді: ${escapeHtml(ansText)}</span></li>`;
+  }).join("");
+  container.innerHTML = `
+    <div class='bg-white dark:bg-[#071025] rounded-2xl shadow-xl p-8'>
+      <h2 class='text-2xl font-bold mb-4'>Ключ відповідей</h2>
+      <ol class='list-decimal ml-6 text-sm'>${list}</ol>
+      <div class='text-center mt-6'>
+        <button id='backToResult' class='bg-purple-600 text-white py-2 px-4 rounded-xl'>Назад</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("backToResult").onclick = () => finish();
+}
+
+document.getElementById("startExamBtn").addEventListener("click", () => {
+  if (!examMode) {
+    if (!confirm("Почати режим «Екзамен» з таймером (20 хв)? Режим блокуватиме зміну відповідей після вибору і буде автоматично завершений по таймеру.")) return;
+    examMode = true;
+    examRemaining = EXAM_SECONDS;
+    startExamTimer();
+ 
+    currentQuestion = 0;
+    score = 0;
+    selectedAnswer = null;
+    selectedAnswers = [];
+    saveState();
+    renderQuiz();
+    document.getElementById("startExamBtn").innerText = "Екзамен: активний";
+    document.getElementById("startExamBtn").classList.add("opacity-80");
+  } else {
+    if (!confirm("Вийти з режиму екзамену? (таймер зупиниться і прогрес буде збережено)")) return;
+    examMode = false;
+    stopExamTimer();
+    saveState();
+    renderQuiz();
+    document.getElementById("startExamBtn").innerText = "Режим «Екзамен»";
+  }
+});
+
+if (loadState()) {
+
+  if (examMode) {
+    if (examRemaining > 0) startExamTimer();
+    document.getElementById("startExamBtn").innerText = "Екзамен: активний";
+  }
+  renderQuiz();
+} else {
+  renderQuiz();
+}
+
+renderTimer();
+
+window.addEventListener("beforeunload", () => {
+  saveState();
+
+});
+</script>
+</body>
+</html>
+
